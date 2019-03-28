@@ -56,7 +56,7 @@ ROOT_URLCONF = 'StudentActivities.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -79,6 +79,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'chai',
+        'USER': 'chai',
         'PASSWORD': '123456',
         'HOST':'192.168.200.201',
         'PORT':'3306',

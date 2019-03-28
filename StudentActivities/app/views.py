@@ -1,6 +1,8 @@
 from django.shortcuts import render
+import os
 from . import models
 from . import tests
+from StudentActivities import settings
 
 # Create your views here.
 
@@ -18,9 +20,38 @@ def login2(request):
             pass
         else:
             print ("passwd error")
-        tests.insertLeader("15971111111", "child", "pid", 25, 10)
-        tests.insertMember("15971111111", "child", "pid", 25, 10, 1000)
         return render(request, 'index.html')
 
 def index(request):
     return render(request, 'index.html')
+
+def activities(request):
+    eventInfo = dict()
+    if request.method == 'GET':
+        event_id = request.GET['event_id']
+        eventInfo = tests.queryEvent(event_id)
+
+        gid = request.GET.get('gid')
+        if gid is None:
+            eventInfo["leaders"] = tests.queryLeaders(event_id)
+        else:
+            eventInfo["leader"] = tests.queryLeader(gid)
+
+    print ("eventInfo:{0}".format(eventInfo))
+    return render(request, 'activities.html', eventInfo)
+
+def upload(request):
+    if request.method == 'POST':
+        obj = request.FILES.get('uploadfile')
+        print ("file name:{0}".format(obj.name))
+        path = os.path.join(settings.BASE_DIR, 'static', '1000')
+        if os.path.exists(path) == False:
+            os.makedirs(path)
+        fw = open(os.path.join(path, obj.name), 'wb')
+        for chunk in obj.chunks():
+            fw.write(chunk)
+        fw.close()
+    return render(request, 'test.html')
+        
+def test(request):
+    return render(request, 'test.html')

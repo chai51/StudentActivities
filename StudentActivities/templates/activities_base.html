@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>{% block title %}blank{% endblock %}</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="description" itemprop="description" content="static">
+		<link rel="stylesheet" href="/static/mui.min.css">
+		<link rel="stylesheet" type="text/css" href="/static/icons-extra.css">
+		<style> div{margin:0;padding:0;}.mui-bar-nav ~ .mui-content{padding-top:5px;}.mui-bar .mui-title{left:0;right:0;}.title{margin:20px 15px 10px;color:#e51c23;font-size:15px;}.titletop{margin:0px;color:black;font-size:20px;border-top:1px solid #c8c7cc;text-align:center;font-weight:bolder;padding:15px 0px;}.mui-content{background-color:white !important;}.title .money{font-size:35px;}.title .group{border:1px solid #ccc;padding:2px 8px;width:100px;}.title .first{border-right:0;color:white;background-color:#e51c23;padding:2px 13px;}.intro{color:#ff9800;}.intro span{font-size:18px;}.liptit{color:#ff4081;margin-bottom:4px !important;}.lipcon{font-size:13px;color:black;}.lipcon .pleft{display:block;float:left;width:28%;}.lipcon .pright{display:block;float:left;width:70%;color:#8a6de9;}.tableh::after{left:0px;}.tableh{padding-left:0;padding-right:0;}.tableh span:first-child{border:0;}.tableh span{display:block;float:left;text-align:center;width:20%;border-left:1px solid black;font-size:13px;height:10px;line-height:10px;color:black;}.join{border:1px solid red;padding:3px 11px;border-radius:13px;color:red;margin-left:6px;}.tablecon p{margin:10px 0;}.tablecon{padding-top:0px;}.mui-pagination  li a{padding:2px 17px;}.page{margin-top:-5px;}.page .total{width:82px;margin-left:14px;margin-top:11px;}.button{text-align:center;margin:20px auto;}.button a{background-color:#3f51b5;color:white;padding:10px 10px;border-radius:5px;}.contul::after{height:0px;}.time{width:256px;margin:0 auto;font-size:13px;padding:4px 0;border-top:1px solid #c8c7cc;border-bottom:1px solid #c8c7cc;text-align:center;}.title .mui-icon-bars{font-size:20px;}.detail:before{left:15px;}.detail p{word-wrap:break-word;word-break:normal;padding:5px 10px 0 15px;}.detail li{padding:0px !important;}.bottom{bottom:0;position:fixed;z-index:10;right:0;left:0;height:70px;border-bottom:0;background-color:white;-webkit-backface-visibility:hidden;backface-visibility:hidden;border-top:1px solid #c8c7cc;}.bottom div{float:left;border:1px solid #c8c7cc;height:70px;font-size:13px;text-align:center;padding:0 5px;border-top:0;}.bottom div p{color:black;margin:0;}.button .joina{display:block;width:150px;margin:0 auto;}.contul::before{height:0;}.mui-backdrop{background-color:rgba(0,0,0,.3) !important;}.mui-popover{height:300px;}.mui-scroll-wrapper{overflow:auto;}#middlePopover table tr{font-size:12px;}#table-1 thead,#table-1 tr{border-top-width:1px;border-top-style:solid;border-top-color:rgb(230,189,189);}#table-1{border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:rgb(230,189,189);}#table-1 td,#table-1 th{padding:5px 0px;font-size:12px;font-family:Verdana;color:rgb(177,106,104);}#table-1 tr:nth-child(2){background-color:rgb(238,211,210)}#table-1 tr:nth-child(odd){background:#FFF;}.mui-popover{background-color:white;}.you .mui-col-xs-12{display:table;padding:0 5%;}.you .people{margin-bottom:12px;margin-right:15px;display:table-cell;}.you .people p{padding:0;color:black;margin:3px 0;}.progess,.progess p{color:red !important;}.weixin{display:none;}.detail img{max-width:100%;}header{display:none;top:0;border:1px solid rgba(142,202,227,0.5) !important;background:rgba(142,202,227,0.5) !important;height:40px !important;font-size:15px;line-height:40px;}a.css-3d-btn:active{position:relative;top:2px;}a.css-3d-btn{background-color:#e51c23;padding:3px 16px;border:1px solid white;border-radius:11px;}</style>
+	<script>
+		var url=window.location.href;
+		if(url.indexOf('&from')>-1){
+			url=url.substring(0,url.indexOf('&from'));	 
+			window.location.href=url;
+		}     
+	</script>
+	</head>
+	<body>
+		<div class="mui-content">
+			 <header class="mui-bar headerbar"> <span>该团共有<span style="color:#e51c23;">{{total}}</span> 人参加，邀请好友来拼团吧！</span></header>
+			 <div id="slider" class="mui-slider">
+		    
+		   <div class="mui-slider-group mui-slider-loop">
+
+				
+
+			</div>
+			<div class="mui-slider-indicator">
+				
+			</div>
+		  			
+		</div>
+		 
+			 
+			 
+			<div class="titletop">
+				参加团活动
+			</div>
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell mui-media">
+					<a href="javascript:;">
+						<div class="intro">
+							<span class="mui-icon-extra mui-icon-extra-class"></span> 活动简介
+						</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media">
+					<p class="liptit">{{content}}！</p>
+					<p class="lipcon"><span class="pleft">活动主办方：</span><span class="pright">{{organizer}}</span></p>
+					<p class="lipcon"><span class="pleft">主办方电话：</span><span class="pright">{{phone}}</span></p>
+					<p class="lipcon"><span class="pleft">主办方地址：</span><span class="pright">{{address}}</span></p>
+					<p class="lipcon"><span class="pleft">活动召集人：</span><span class="pright">{{convener}}</span></p>
+					<p class="lipcon"><span class="pleft">当前名额：</span><span class="pright">{{total}}人<a href="https://ip:port/public/index/index/team?actionid=1552479651254,12656#middlePopover" style="color: white;background-color: #3f51b5;padding: 3px 8px;border-radius: 3px;float: right;margin-top: -6px;">查看参团人员</a></span></p>
+
+				</li>
+
+
+			</ul>
+			<div class="title">
+
+			</div>
+			<ul class="mui-table-view  contul" style="margin-top: -10px;">
+				<li class="mui-table-view-cell mui-media tableh tablecon">
+
+					<div class="button" style="margin-top: 0px;padding-top: 5px;">
+						 					<a style="padding: 0;height: 33px;line-height: 33px;border-radius: 56px;background: #e51c23;-webkit-box-shadow: 0 1px 8px 0 #e51c23;box-shadow: 0 1px 8px 0 #e51c23;font-size: 14px;display: block;margin: 0 15px;">距离下一个优惠条件差2人，快来拼团吧</a>
+									</div>
+					<div class="button you mui-row">
+						<div class="mui-col-xs-12" style="float: right">
+							<div class="people progess">
+								<img style="width: 26px;" src="/static/redx.png">
+								<p>1人</p>
+								<p>2000元</p>
+							</div>
+
+														<div class="people " "="">
+																<img style="width: 26px;" src="/static/blackx.png">
+								 
+								<p>3人</p>
+								<p>558元</p>
+							</div>
+														<div class="people " "="">
+																<img style="width: 26px;" src="/static/blackx.png">
+								 
+								<p>6人</p>
+								<p>258元</p>
+							</div>
+													</div>
+					</div>
+					<p style="font-size: 12px;text-align: center;">玩法提示：报团不需要线上支付，联系商家时需要提供手机号确认。</p>
+					<div class="button">
+						
+						<p><a class="joina" href="https://ip:port/public/index/index/join?actionid=1552479651254,12656">我要加入该团</a></p>
+												<p><a class="joina addweixin" href="javascript:void(0);">添加主办方微信</a></p>
+												<p style="margin-top: 25px;"><a href="https://ip:port/public/index/template/index?actionid=1552479651254" style="padding: 6px 20px;background: #e236d9;">发起拼团</a></p>
+					</div>
+				</li>
+			</ul>
+			<div class="title" style="color: #ff9800;font-size: 17px;margin-top: 5px;">
+				<span class="mui-icon mui-icon-bars"></span> 活动详情
+			</div>
+			<ul class="mui-table-view mui-table-view-chevron detail">
+				<li class="mui-table-view-cell mui-media">
+					<p>{{detail}}</p><p><img src="/static/{{id}}/1552894079252066.png" title="1552894079252066.png" alt="index2.png"></p><p>如果您也需要招生策划和招生指导，请添加微信：<a href="tel:13902464046" target="_self" style="white-space: normal;">13902464046</a>&nbsp;或 <a href="tel:18664902919" target="_self" style="white-space: normal;">18664902919</a>（微信电话同号）</p>					<div style="text-align: center;margin: 20px;margin-bottom: 120px;"><a href="tel:18138868712" style="color: white;background-color: #3f51b5;padding: 10px 10px;border-radius: 5px;">拨打主办方电话</a></div>
+				</li>
+
+			</ul>
+
+
+		</div>
+		<div class="bottom">
+		  <a href="https://ip:port/public/index/template/index?actionid=1552479651254">
+		    <div style="border-left: 0;border-right: 0;width: 26%">
+		    <span style="font-size: 30px;padding-top: 8px;color: black;" class="mui-icon-extra mui-icon-extra-computer"></span>
+		    <p>活动主页</p>
+		    </div>
+		  </a>
+		  <a href="tel:18138868712" style="color: black;">
+		    <div style="width: 24%"><span style="font-size: 30px;padding-top: 9px;" class="mui-icon mui-icon-chatboxes"></span><p>活动咨询</p></div>
+		  </a>
+		  
+		  <a href="https://ip:port/public/index/index/join?actionid=1552479651254,12656">
+		  <div style="width: 50%; background-color: #e51c23;">
+		    <span style="font-size: 30px;padding-top: 8px;color: white;" class="mui-icon-extra mui-icon-extra-addpeople"></span>
+		    <p style="color: white; font-size: 14px;">加入该团</p>
+		  </div>
+		  </a>
+		</div>
+
+		<div id="middlePopover" class="mui-popover">
+			<div class="mui-popover-arrow"></div>
+			<div class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<table id="table-1" style="width: 100%;text-align: center;">
+												<tbody><tr>
+							<th>身份</th><th>报团人</th><th>电话</th><th>名额</th>
+							<th>类型</th>						</tr>
+												<tr class="teamer">
+						<td>团长</td>
+						<td>彭铄</td>
+						<td>135****64</td>
+						<td>1</td>
+						<td>老生</td>						</tr>
+						
+					</tbody></table>
+
+				</div>
+			</div>
+
+		</div>
+				<!--<div class="mui-popup mui-popup-in" style="display: block;"><div class="mui-popup-inner"><div class="mui-popup-title" style="margin: 10px auto;color: #e51c23;">活动已结束</div><div class="mui-popup-title" style="margin: 10px auto;color: #e51c23;">谢谢你的关注</div></div></div>
+		<div class="mui-popup-backdrop mui-active" style="display: block;"></div>-->
+				<div class="weixin">
+			<div class="mui-popup mui-popup-in" style="display: block;width: 200px;border-radius: 0;">
+				<img src="/static/{{id}}/1552643081.jpg" style="width: 100%; ">
+			</div>
+			<div class="mui-popup-backdrop mui-active" style="display: block;"></div>
+		</div>
+	
+	<script src="/static/mui.min.js.下载"></script>
+	<script type="text/javascript" src="/static/jquery-2.1.4.min.js.下载"></script>
+
+	
+	<script>
+	    
+		function getScrollTop() {  
+				var scrollPos;  
+				if (window.pageYOffset) {  
+				scrollPos = window.pageYOffset; }  
+				else if (document.compatMode && document.compatMode != 'BackCompat')  
+				{ scrollPos = document.documentElement.scrollTop; }  
+				else if (document.body) { scrollPos = document.body.scrollTop; }   
+				return scrollPos;   
+		}  
+       $(function(){
+             
+           $(window).scroll(function(){
+		        //var o = document.getElementById("slider");
+                //var h = o.offsetHeight; //高度
+		        var yheight=getScrollTop(); 
+                if(yheight>150){
+					$('.headerbar').show();
+				}else{
+					$('.headerbar').hide();
+				}
+           });
+ 
+
+       });
+   </script>
+	
+	
+	
+	<script>
+        $(function () {
+            $('.addweixin').click(function () {
+                $('.weixin').show();
+            });
+            $('.mui-active').click(function () {
+                $('.weixin').hide();
+            });
+        });
+	</script>
+	<script src="/static/jweixin-1.0.0.js.下载"></script>
+	<script type="text/javascript">
+        window.onload = function () {
+            var  url = location.href.split('#')[0]; // 传给后台PHP\
+            url2=url.substring(0,url.indexOf('public'));
+
+            var imgUrl = url2+'public/share/0';
+            var lineLink = url;
+            var descContent = "static";
+            var shareTitle = 'static';
+
+
+            $.ajax({
+                type: "GET",
+                url: "../index/share?url="+url,
+                dataType : "json",
+                success: function(data) {
+                    wx.config({
+                        debug: false,
+                        appId: data.appId,
+                        timestamp: data.timestamp,
+                        nonceStr: data.nonceStr,
+                        signature: data.signature,
+                        jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage']
+                    });
+                    wx.ready(function () {
+                        wx.onMenuShareTimeline({
+                            title: shareTitle,
+                            link:  lineLink,
+                            imgUrl: imgUrl,
+                            success: function () {
+                                //分享成功回调函数
+                            },
+                            cancel: function () {
+                                // 取消分享回调函数
+                            }
+                        });
+                        wx.onMenuShareAppMessage({
+                            title: shareTitle, // 分享标题
+                            desc:  descContent, // 分享描述
+                            link: lineLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                            imgUrl: imgUrl, // 分享图标
+                            type: '', // 分享类型,music、video或link，不填默认为link
+                            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                            success: function () {
+                                // 用户确认分享后执行的回调函数
+                            },
+                            cancel: function () {
+                                // 用户取消分享后执行的回调函数
+                            }
+
+                        });
+
+
+                    });
+                }
+            });
+        }
+
+	</script>
+
+
+
+
+
+</body></html>
