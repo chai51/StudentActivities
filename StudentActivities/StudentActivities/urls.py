@@ -24,9 +24,9 @@ urlpatterns = [
     url(r'^login.html$', app_views.login),
     url(r'^login$', app_views.login2),
 
-    url(r'^index.html$', app_views.index),
     url(r'^activities.html$', app_views.activities),
     url(r'^upload/$', app_views.upload),
 
-    url(r'^test.html$', app_views.test),
+    url(r'^create', app_views.create),
+    url(r'^join', app_views.join)
 ]

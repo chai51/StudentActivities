@@ -34,3 +34,6 @@ def queryLeader(gid):
 
 def queryEvent(event_id):
     return models.Event.objects.filter(id=event_id).values()[0]
+
+def queryEvents():
+    return models.Event.objects.order_by("-id").values()

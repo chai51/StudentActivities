@@ -20,10 +20,11 @@ def login2(request):
             pass
         else:
             print ("passwd error")
-        return render(request, 'index.html')
-
-def index(request):
-    return render(request, 'index.html')
+            return render(request, 'login.html', {"error":"user or passwd error"})
+        
+        events = tests.queryEvents()
+        print ("events:{0}".format(events))
+        return render(request, 'index.html', {"events":events})
 
 def activities(request):
     eventInfo = dict()
@@ -38,7 +39,7 @@ def activities(request):
             eventInfo["leader"] = tests.queryLeader(gid)
 
     print ("eventInfo:{0}".format(eventInfo))
-    return render(request, 'activities.html', eventInfo)
+    return render(request, 'activities{0}.html'.format(event_id), eventInfo)
 
 def upload(request):
     if request.method == 'POST':
@@ -53,5 +54,11 @@ def upload(request):
         fw.close()
     return render(request, 'test.html')
         
-def test(request):
+def create(request):
+    values=request.POST.getlist("form1")
+    print (values)
+
+    return render(request, 'test.html')
+
+def join(request):
     return render(request, 'test.html')

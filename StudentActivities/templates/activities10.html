@@ -1,0 +1,725 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title>​{{title}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta itemprop="name" content="{{title}}">
+	<meta itemprop="image" content="/public/share/0">
+    <meta name="description" itemprop="description" content="{{title}}">
+    <link rel="stylesheet" href="/static/{{id}}/mui.min.css">
+    <style>
+        body {
+            background: #fff;
+        }
+
+        div {
+            margin: 0;
+            padding: 0;
+        }
+
+        .mui-bar-nav ~ .mui-content {
+            padding-top: 5px;
+        }
+
+        .mui-bar .mui-title {
+            left: 0;
+            right: 0;
+        }
+
+        .title {
+            margin: 20px 15px 10px;
+            color: #e51c23;
+            font-size: 15px;
+        }
+
+        .mui-content {
+            background-color: white !important;
+        }
+
+        .title .money {
+            font-size: 35px;
+        }
+
+        .title .group {
+            border: 1px solid #ccc;
+            padding: 2px 8px;
+            width: 100px;
+        }
+
+        .title .first {
+            border-right: 0;
+            color: white;
+            background-color: #e51c23;
+            padding: 2px 13px;
+        }
+
+        .intro {
+            color: #ff9800;
+        }
+
+            .intro span {
+                font-size: 18px;
+            }
+
+        .liptit {
+            color: #ff4081;
+            margin-bottom: 4px !important;
+        }
+
+        .lipcon {
+            font-size: 13px;
+            color: black;
+        }
+
+            .lipcon .pleft {
+                display: block;
+                float: left;
+                width: 28%;
+            }
+
+            .lipcon .pright {
+                display: block;
+                float: left;
+                width: 70%;
+                color: #8a6de9;
+            }
+
+        .tableh::after {
+            left: 0px;
+        }
+
+        .tableh {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+            .tableh .stitle:first-child {
+                border: 0;
+            }
+
+            .tableh .stitle {
+                display: block;
+                float: left;
+                text-align: center;
+                width: 20%;
+                border-left: 1px solid black;
+                font-size: 13px;
+                height: 13px;
+                line-height: 13px;
+                color: black;
+            }
+
+        .join {
+            border: 1px solid red;
+            padding: 3px 11px;
+            border-radius: 13px;
+            color: red;
+            margin-left: 6px;
+        }
+
+        .tablecon p {
+            margin: 10px 0;
+            padding-bottom: 24px;
+        }
+
+        .tablecon {
+            padding-top: 6px;
+        }
+
+        .mui-pagination li a {
+            padding: 2px 17px;
+        }
+
+        .page {
+            margin: 0 auto;
+            width: 265px;
+            margin-top: 10px;
+        }
+
+            .page .total {
+                width: 85px;
+                margin-top: 6px;
+                display: block;
+                float: left;
+                font-size: 13px;
+            }
+
+        .button {
+            text-align: center;
+            margin: 20px auto;
+            margin-top: 35px;
+        }
+
+            .button a {
+                background-color: #3f51b5;
+                color: white;
+                padding: 10px 10px;
+                border-radius: 5px;
+            }
+
+        .contul::after {
+            height: 0px;
+        }
+
+        .time {
+            width: 256px;
+            margin: 0 auto;
+            font-size: 13px;
+            padding: 4px 0;
+            border-top: 1px solid #c8c7cc;
+            border-bottom: 1px solid #c8c7cc;
+            text-align: center;
+        }
+
+        .title .mui-icon-bars {
+            font-size: 20px;
+        }
+
+        .detail:before {
+            left: 15px;
+        }
+
+        .detail p {
+            word-wrap: break-word;
+            word-break: normal;
+            padding: 5px 10px 0 15px;
+        }
+
+        .detail li {
+            padding: 0px !important;
+        }
+
+        .bottom {
+            bottom: 0px;
+            position: fixed;
+            z-index: 10;
+            right: 0;
+            left: 0;
+            height: 70px;
+            border-bottom: 0;
+            background-color: white;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-top: 1px solid #c8c7cc;
+        }
+
+            .bottom div {
+                float: left;
+                border: 1px solid #c8c7cc;
+                height: 70px;
+                font-size: 13px;
+                text-align: center;
+                padding: 0 5px;
+                border-top: 0;
+            }
+
+                .bottom div p {
+                    color: black;
+                    margin: 0;
+                }
+
+        .share_div {
+            display: none;
+        }
+
+        .mui-progressbar-success span {
+            background-color: #29c644;
+        }
+
+        .mui-progressbar-success .full {
+            background-color: #ff2929 !important;
+        }
+
+        .currentpage {
+            color: white !important;
+            font-size: 17px !important;
+            margin-top: 6px;
+            min-width: 23px !important;
+        }
+
+        .weixin, .weixin2 {
+            display: none;
+        }
+
+        .detail img {
+            max-width: 100%;
+        }
+
+        header {
+            display: none;
+            top: 0;
+            border: 1px solid rgba(142,202,227,0.5) !important;
+            background: rgba(142,202,227,0.5) !important;
+            height: 40px !important;
+            font-size: 15px;
+            line-height: 40px;
+        }
+
+        .bottom2 {
+            bottom: 3px;
+            position: fixed;
+            z-index: 10;
+            right: 0;
+            left: 0;
+            height: 27px;
+            border-bottom: 0;
+            cursor: pointer;
+        }
+
+        .searchteam {
+            position: absolute;
+            right: 4px;
+            border: 1px solid #999;
+            border-radius: 3px;
+            top: 4px;
+            color: #999;
+            cursor: pointer;
+            font-size: 14px;
+            height: 26px;
+            width: 42px;
+            text-align: center;
+            line-height: 26px;
+            z-index: 100000;
+        }
+
+            .searchteam:active {
+                color: #333;
+                border: 1px solid #333;
+            }
+
+        .mui-placeholder {
+            font-size: 13px !important;
+            line-height: 37px !important;
+        }
+    </style>
+</head>
+<body>
+<!--
+    <header class="mui-bar headerbar" style="display: none;">
+        <span>共参与<span style="color:#e51c23;">55</span>人，新生参与 <span style="color:#e51c23;">34</span>人</span>
+    </header>-->
+    <div id="slider" class="mui-slider">
+
+        <img style="width:100%;" src="/static/{{id}}/1-1553844308.jpg">
+
+    </div>
+    <div class="mui-content">
+
+        <div class="title">
+            ￥<span class="money">298</span>.00&nbsp;&nbsp;&nbsp;<span class="group first">6人团</span><span class="group">省2102元</span>
+        </div>
+        <ul class="mui-table-view">
+            <li class="mui-table-view-cell mui-media">
+                <a href="javascript:;">
+                    <div class="intro">
+                        <span class="mui-icon-extra mui-icon-extra-class"></span> 活动简介
+                    </div>
+                </a>
+            </li>
+            <li class="mui-table-view-cell mui-media">
+                <p class="liptit" style="font-size: 16px;">​{{content}}</p>
+                <p class="lipcon"><span class="pleft">活动主办方：</span><span class="pright">{{organizer}}</span></p>
+                <p class="lipcon"><span class="pleft">主办方电话：</span><span class="pright">{{phone}}</span></p>
+                <p class="lipcon"><span class="pleft">主办方地址：</span><span class="pright">{{address}}</span></p>
+                <p class="lipcon"><span class="pleft">召集人数：</span><span class="pright">200 人</span></p>
+                <p class="lipcon"><span class="pleft">每批人数：</span><span class="pright">6 人/团</span></p>
+                <p class="lipcon"><span class="pleft">活动时间：</span><span class="pright">{{event.start_time|date:"Y-m-d"}}/{{event.end_time|date:"Y-m-d"}}</span></p>
+            </li>
+
+        </ul>
+        <div class="title">
+        </div>
+        <div class="mui-input-row mui-search" style="margin-top: 6px;margin-left: 20px;margin-right: 20px;">
+            <input type="search" class="mui-input-clear search" placeholder="" data-input-clear="1" data-input-search="1"><span class="mui-icon mui-icon-clear mui-hidden"></span><span class="mui-placeholder"><span class="mui-icon mui-icon-search"></span><span>输入姓名/电话号码搜索团</span></span><span class="searchteam">搜索</span>
+        </div>
+        <ul class="mui-table-view  contul">
+            <li class="mui-table-view-cell mui-media tableh">
+                <p><span class="stitle" style="width: 15%">编号</span><span class="stitle" style="width: 17%">团长</span><span class="stitle" style="width: 20%">当前进度</span><span class="stitle">手机号</span><span class="stitle" style="width: 24%">参加活动</span></p>
+            </li>
+            <li class="mui-table-view-cell mui-media tableh tablecon">
+                <div class="pagediv page1">
+					{% for leader in leaders %}
+						<p>
+							<span class="stitle" style="width: 13%">{{leader.gid}}</span>
+							<span class="stitle kaiman" style="width: 19%;overflow: hidden;">{{leader.name}}</span>
+							<span class="stitle" style="padding: 0px 5px;font-size: 10px;">
+                            <span class="stitle" style="padding: 0px 5px;font-size: 10px;">
+                            <span style="width: 100%;height: 6px;" class="stitle mui-progressbar mui-progressbar-success" data-progress="30"><span style="width: 100%; transform: translate3d(-70%, 0px, 0px);"></span></span>
+                            {{leader.count}}0%
+							</span>
+							<span class="stitle phone" ph="18616029584" style="width: 17%">{{leader.phone}}</span>
+							<span class="stitle" style="width: 27%"><a class="join" href="/activities.html?event_id={{id}}&gid={{leader.gid}}">加入该团</a></span>
+						</p>
+					{% endfor %}
+                </div>
+
+                <div class="page">
+                    <span class="total">总团数（25）</span><ul class="mui-pagination">
+                        <li class="mui-previous mui-disabled">
+                            <a href="javascript:void (0);">
+                                «
+                            </a>
+                        </li>
+                        <li class="mui-active">
+                            <a href="javascript:void (0);">
+                                <span class="currentpage" total="5">1</span>/5
+                            </a>
+                        </li>
+
+                        <li class="mui-next ">
+                            <a href="javascript:void (0);">
+                                »
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+			<div class="title" style="color: #e51c23;font-size: 17px;margin-top: 5px;">
+				<span style="color:#e51c23" class="mui-icon mui-icon-bars"></span> 开启活动
+			</div>
+			<ul class="mui-table-view mui-table-view-chevron detail detail2">
+				<li class="mui-table-view-cell mui-media">
+					<form class="mui-input-group" style="padding-top: 10px;" id="form1">
+						{% csrf_token %}
+						<input type="hidden" name="huoid" id="huoid" value="221">
+						<input type="hidden" name="type" value="1">
+												<input type="hidden" name="miner" id="miner" value="1">
+												<input type="hidden" id="hasdaibao" value="0">
+
+						<div class="kaituandiv">
+						<div class="mui-input-row">
+							<label><span style="color: red;">* </span>学员姓名</label>
+							<input type="text" name="kaiman" id="kaiman" required="" placeholder="请输入真实姓名" maxlength="20" mess="请填写学员姓名">
+						</div>
+						<div class="mui-input-row ">
+							<label><span style="color: red;">* </span>联系电话</label>
+							<input type="text" name="phone" id="phone" required="" class="mui-input-clear" placeholder="请输入电话号码" maxlength="20" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,&#39;&#39;)}else{this.value=this.value.replace(/\D/g,&#39;&#39;)}" mess="请填写联系电话" data-input-clear="2"><span class="mui-icon mui-icon-clear mui-hidden"></span>
+						</div>
+						<input type="hidden" name="kaiproject" id="kaiproject">
+												<div class="mui-input-row ">
+							<label>
+																<span style="color: red;">* </span>
+																孩子年龄							</label>
+							<input type="text" project="孩子年龄" name="baomin0" class="mui-input-clear kaiproject" placeholder="请输入孩子年龄" maxlength="2" required="" mess="请填写孩子年龄" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,&#39;&#39;)}else{this.value=this.value.replace(/\D/g,&#39;&#39;)}" data-input-clear="3"><span class="mui-icon mui-icon-clear mui-hidden"></span>
+						</div>
+												<div class="mui-input-row ">
+							<label>
+																<span style="color: red;">* </span>
+																家长姓名							</label>
+							<input type="text" project="家长姓名" name="baomin1" class="mui-input-clear kaiproject" placeholder="请输入家长姓名" maxlength="8" required="" mess="请填写家长姓名" data-input-clear="4"><span class="mui-icon mui-icon-clear mui-hidden"></span>
+						</div>
+						
+						<!--其他选项-->
+								                    <input type="hidden" name="daicount" id="daicount">
+
+							<div class="otherdiv">
+						    <!--有无代报-->
+															<div class="mui-input-row">
+									<label><span style="color: red;">&nbsp;&nbsp;</span>选择课程</label>
+									<select class="mui-btn mui-btn-block course" style="width: 65%;">
+										<option value="-1">请选择课程</option>
+																				<option value="11667">少儿美育课(3-12岁)</option>
+																			</select>
+								</div>
+															<div class="mui-input-row mui-radio mui-left phone" style="width: 35%;float: right">
+								<label>新生</label>
+								<input name="radio1" type="radio" checked="" value="0">
+							</div>
+							<div class="mui-input-row mui-radio mui-left phone" style="width: 35%;float: right">
+								<label>老生</label>
+								<input name="radio1" type="radio" value="1">
+							</div>
+
+							<div class="mui-input-row mui-radio mui-left phone" style="width: 30%;float: right">
+								<label style="padding-left: 15px;"><span style="color: red;">&nbsp;&nbsp;</span>类型</label>
+							</div>
+		                    
+		                   </div>
+
+						
+
+					
+				</div></form></li>
+			</ul>
+			<div class="button">
+				<input type="hidden" value="0" id="phonecheck">
+				<input type="hidden" value="0" id="kaimancheck">
+				<input type="hidden" value="1" id="oldnum">
+				<input type="hidden" value="1" id="newold">
+
+				<p style="margin-top: 25px;"><a href="/create" style="padding: 6px 20px;background: #e236d9;">发起拼团</a></p>
+			</div>
+                <div class="button">
+                    <a href="javascript:void (0)" class="createteam">我要做团长参加活动</a>
+                    <a href="javascript:void(0);" class="addweixin">添加主办方微信</a>
+                </div>
+                <div class="time">
+                    <span>活动时间：</span>
+                    <span style="color: #e51c23;">{{event.start_time|date:"Y-m-d"}}/{{event.end_time|date:"Y-m-d"}}</span>
+                </div>
+            </li>
+        </ul>
+        <div class="title" style="color: #ff9800;font-size: 17px;">
+            <span class="mui-icon mui-icon-bars"></span> 活动详情
+        </div>
+        <ul class="mui-table-view mui-table-view-chevron detail">
+            <li class="mui-table-view-cell mui-media">
+                <p><span style="font-size: 16px; color: rgb(0, 0, 0);">{{detail}}</span></p><p><span style="color: rgb(255, 0, 0); font-size: 20px;">本次课程说明：</span></p><p><span style="color: rgb(255, 0, 0);">1、老生为叠加课时，新生才会进行排课。</span></p><p><span style="color: rgb(255, 0, 0);">2、1周1/2次课，1个半月12课时，将尽量根据孩子的时间来排课。</span></p><p><span style="font-size: 20px; color: rgb(0, 176, 240);">不是体验课时！不是体验课时！</span></p><p><span style="color: rgb(255, 0, 0);">学生上课后，如续报课程内容还可以继续进行延续。</span></p><p><img src="/static/{{id}}/1553844335535031.png" title="1553844335535031.png" alt="detail.png"></p>					<div style="text-align: center;margin: 20px;margin-bottom: 100px;"><a href="tel:18123979069" style="color: white;background-color: #3f51b5;padding: 10px 10px;border-radius: 5px;">拨打主办方电话</a></div>
+            </li>
+        </ul>
+
+    </div>
+    <div class="bottom">
+        <a href="/activities.html?event_id={{id}}">
+            <div style="border-left: 0;border-right: 0;width: 26%">
+                <span style="font-size: 30px;padding-top: 8px;color: black;" class="mui-icon-extra mui-icon-extra-computer"></span>
+                <p>活动主页</p>
+            </div>
+        </a>
+        <a href="tel:18138287955" style="color: black;">
+            <div style="width: 24%"><span style="font-size: 30px;padding-top: 9px;" class="mui-icon mui-icon-chatboxes"></span><p>活动咨询</p></div>
+        </a>
+        <a href="javascript:void (0);" class="createteam">
+            <div style="width: 50%;background-color: #e51c23;">
+                <span style="font-size: 30px;padding-top: 8px;color: white;" class="mui-icon-extra mui-icon-extra-addpeople"></span>
+                <p style="color: white;">发起拼团</p>
+                <span style="position: absolute;color: white;font-weight: bold;bottom: 19px;right: 10px;font-size: 30px;" class="mui-icon mui-icon-forward"></span>
+            </div>
+        </a>
+    </div>
+
+
+
+    <div class="weixin">
+        <div class="mui-popup mui-popup-in" style="display: block;width: 200px;border-radius: 0;">
+            <img src="/static/{{id}}/1552011558.jpg" style="width: 100%; ">
+        </div>
+        <div class="mui-popup-backdrop mui-active" style="display: block;"></div>
+    </div>
+
+
+
+    <script src="/static/{{id}}/mui.min.js.下载"></script>
+    <script type="text/javascript" src="/static/{{id}}/jquery-2.1.4.min.js.下载"></script>
+    <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://"); document.write(unescape("%3Cspan id='cnzz_stat_icon_1276714105'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1276714105%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script><span id="cnzz_stat_icon_1276714105"><a href="https://www.cnzz.com/stat/website.php?web_id=1276714105" target="_blank" title="站长统计"><img border="0" hspace="0" vspace="0" src="/static/{{id}}/pic1.gif"></a></span>
+    <script src="/static/{{id}}/z_stat.php" type="text/javascript"></script>
+    <script src="/static/{{id}}/core.php" charset="utf-8" type="text/javascript"></script>
+    <script>
+        //自定义颜色示例
+        mui(".mui-progressbar").each(function () {
+            mui(this).progressbar({ progress: this.getAttribute("data-progress") }).show();
+        });
+    </script>
+
+
+    <script>
+
+        function getScrollTop() {
+            var scrollPos;
+            if (window.pageYOffset) {
+                scrollPos = window.pageYOffset;
+            }
+            else if (document.compatMode && document.compatMode != 'BackCompat')
+            { scrollPos = document.documentElement.scrollTop; }
+            else if (document.body) { scrollPos = document.body.scrollTop; }
+            return scrollPos;
+        }
+        $(function () {
+
+            $(window).scroll(function () {
+                // var o = document.getElementById("slider");
+                // var h = o.offsetHeight; //高度
+                var yheight = getScrollTop();
+                if (yheight > 250) {
+                    $('.headerbar').show();
+                    //$('.bottom2').hide();
+                    //$(".bottom").css("bottom","0px");
+
+                } else {
+                    $('.headerbar').hide();
+                    //$('.bottom2').show();
+                    //$(".bottom").css("bottom","27px");
+                }
+            });
+
+
+        });
+    </script>
+    <script>
+        $(function () {
+
+            function RndNum(n) {
+                var rnd = "";
+                for (var i = 0; i < n; i++)
+                    rnd += Math.floor(Math.random() * 10);
+                return rnd;
+            }
+            $('.createteam').click(function () {
+                var rand = RndNum(5);
+                var url = "../index/muster?actionid=1554773668513&r=" + rand;
+                window.location.href = url;
+            });
+
+
+            $('.mui-next').click(function () {
+                var total = $('.currentpage').attr('total');
+                var currpage = $('.currentpage').html();
+                if (parseInt(currpage) >= parseInt(total)) {
+                    return false;
+                }
+                var nextpage = parseInt(currpage) + parseInt(1);
+                if (nextpage > 1) {
+                    $('.mui-previous').removeClass('mui-disabled');
+                }
+                if (nextpage == total) {
+                    $(this).addClass('mui-disabled');
+                }
+                $('.currentpage').html(nextpage);
+                $('.tablecon .pagediv').hide();
+                $('.page' + nextpage).show();
+            });
+            $('.mui-previous').click(function () {
+                var currpage = $('.currentpage').html();
+                if (currpage == 1) {
+                    return false;
+                }
+                var nextpage = parseInt(currpage) - parseInt(1);
+                if (nextpage == 1) {
+                    $(this).addClass('mui-disabled');
+                }
+                $('.currentpage').html(nextpage);
+                $('.tablecon .pagediv').hide();
+                $('.page' + nextpage).show();
+            });
+
+
+            $('.addweixin').click(function () {
+                $('.weixin').show();
+            });
+            $('.mui-active').click(function () {
+                $('.weixin').hide();
+            });
+            $('.bottom2').click(function () {
+                $('.weixin2').show();
+            });
+            $('.mui-active').click(function () {
+                $('.weixin2').hide();
+            });
+
+
+            $(".search").focus(function () {
+                $('.bottom').css('position', 'relative');
+            });
+            $(".search").blur(function () {
+                $('.bottom').css('position', 'fixed');
+            });
+
+
+
+            $(".search").keydown(function (event) {
+                if (event.keyCode == "13") {
+                    var key = $.trim($('.search').val());
+                    if (key != '') {
+                        $('.pagediv p').each(function () {
+                            var kaiman = $(this).find('.kaiman').attr('cys');
+                            if (kaiman.indexOf(key) > -1) {
+                                $(this).parent().show();
+                                $(this).show();
+                            } else {
+                                $(this).hide();
+                            }
+                        });
+                    } else {
+                        window.location.reload();
+                    }
+
+                }
+            });
+            $('.searchteam').click(function () {
+                var key = $.trim($('.search').val());
+                if (key != '') {
+                    $('.pagediv p').each(function () {
+                        var kaiman = $(this).find('.kaiman').attr('cys');
+                        if (kaiman.indexOf(key) > -1) {
+                            $(this).parent().show();
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    });
+                } else {
+                    window.location.reload();
+                }
+            });
+
+
+
+        });
+    </script>
+
+    <script src="/static/{{id}}/jweixin-1.0.0.js.下载"></script>
+    <script type="text/javascript">
+        window.onload = function () {
+            var url = location.href.split('#')[0]; // 传给后台PHP\
+            url2 = url.substring(0, url.indexOf('public'));
+
+            var imgUrl = url2 + 'public/share/0';
+            var lineLink = url;
+            var descContent = "{{content}}";
+            var shareTitle = '​{{title}}';
+
+            $.ajax({
+                type: "GET",
+                url: "../index/share?url=" + url,
+                dataType: "json",
+                success: function (data) {
+                    wx.config({
+                        debug: false,
+                        appId: data.appId,
+                        timestamp: data.timestamp,
+                        nonceStr: data.nonceStr,
+                        signature: data.signature,
+                        jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage']
+                    });
+                    wx.ready(function () {
+                        wx.onMenuShareTimeline({
+                            title: shareTitle,
+                            link: lineLink,
+                            imgUrl: imgUrl,
+                            success: function () {
+                                //分享成功回调函数
+                            },
+                            cancel: function () {
+                                // 取消分享回调函数
+                            }
+                        });
+                        wx.onMenuShareAppMessage({
+                            title: shareTitle, // 分享标题
+                            desc: descContent, // 分享描述
+                            link: lineLink, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                            imgUrl: imgUrl, // 分享图标
+                            type: '', // 分享类型,music、video或link，不填默认为link
+                            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                            success: function () {
+                                // 用户确认分享后执行的回调函数
+                            },
+                            cancel: function () {
+                                // 用户取消分享后执行的回调函数
+                            }
+
+                        });
+
+
+                    });
+                }
+            });
+        }
+
+    </script>
+
+</body>
+</html>
