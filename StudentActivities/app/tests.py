@@ -4,15 +4,15 @@ from . import models
 # Create your tests here.
 
 # 团长
-def insertLeader(phone, child_name, name, age, event_id):
-    leader = models.Student(phone=phone, child_name=child_name, name=name, age=age, event_id=event_id)
+def insertLeader(phone, child_name, name, age, event_id, status, course_id):
+    leader = models.Student(phone=phone, child_name=child_name, name=name, age=age, event_id=event_id, status=status, course_id=course_id)
     leader.save()
     leader.gid = leader.id
     leader.save()
 
 # 团员
-def insertMember(phone, child_name, name, age, event_id, gid):
-    member = models.Student(gid=gid, phone=phone, child_name=child_name, name=name, age=age, event_id=event_id)
+def insertMember(phone, child_name, name, age, event_id, gid, status, course_id):
+    member = models.Student(gid=gid, phone=phone, child_name=child_name, name=name, age=age, event_id=event_id, status=status, course_id=course_id)
     member.save()
 
 # 查询团购进程以及团长信息
@@ -37,3 +37,6 @@ def queryEvent(event_id):
 
 def queryEvents():
     return models.Event.objects.order_by("-id").values()
+
+def queryCourses(event_id):
+    return models.Course.objects.filter(event_id=event_id).values()

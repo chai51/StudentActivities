@@ -128,5 +128,6 @@ STATIC_URL = '/static/'
 # 如果不想用 STATICFILES_DIRS 可以不用，都放在 app 里的 static 中也可以
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "common_static"),
+    os.path.join(BASE_DIR, "static"),
 #    '/path/to/others/static/',  # 用不到的时候可以不写这一行
 )

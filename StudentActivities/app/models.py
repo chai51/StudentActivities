@@ -31,6 +31,8 @@ class Student(models.Model):
     name = models.CharField(u'家长姓名', max_length=32)
     age = models.IntegerField(help_text=u'年龄')
     event_id = models.IntegerField(help_text=u'活动id')
+    course_id = models.IntegerField(help_text=u'课程id')
+    status = models.IntegerField(help_text=u'0新生，1老生')
     create_time = models.DateTimeField(u'创建时间', auto_now_add=True)
 
 class LoginLog(models.Model):
@@ -38,3 +40,8 @@ class LoginLog(models.Model):
     ip = models.CharField(u'登录ip', max_length=24)
     position = models.CharField(u'登录位置', max_length=24)
     create_time = models.DateTimeField(u'创建时间', auto_now_add=True)
+
+class Course(models.Model):
+    id = models.AutoField(primary_key=True)
+    event_id = models.IntegerField(help_text=u'活动id')
+    content = models.TextField(u'课程简介')

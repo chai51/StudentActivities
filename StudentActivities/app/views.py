@@ -35,8 +35,11 @@ def activities(request):
         gid = request.GET.get('gid')
         if gid is None:
             eventInfo["leaders"] = tests.queryLeaders(event_id)
+            eventInfo["courses"] = tests.queryCourses(event_id)
         else:
             eventInfo["leader"] = tests.queryLeader(gid)
+            eventInfo["count"] = len(eventInfo["leader"])
+            eventInfo["courses"] = tests.queryCourses(event_id)
 
     print ("eventInfo:{0}".format(eventInfo))
     return render(request, 'activities{0}.html'.format(event_id), eventInfo)
@@ -55,10 +58,27 @@ def upload(request):
     return render(request, 'test.html')
         
 def create(request):
-    values=request.POST.getlist("form1")
-    print (values)
-
+    if request.method == 'POST':
+        child_name = request.POST['kaiman']
+        phone = request.POST['phone']
+        age = request.POST['baomin0']
+        name = request.POST['baomin1']
+        select = request.POST['select']
+        status = request.POST['radio1']
+        event_id = request.POST['event_id']
+        print ("child name:{}, phone:{}, age:{}, name:{}, select:{}, radio1:{}".format(child_name, phone, age, name, select, status))
+        tests.insertLeader(phone, child_name, name, age, event_id, status, select)
     return render(request, 'test.html')
 
 def join(request):
+    if request.method == 'POST':
+        child_name = request.POST['kaiman']
+        phone = request.POST['phone']
+        age = request.POST['baomin0']
+        name = request.POST['baomin1']
+        select = request.POST['select']
+        status = request.POST['radio1']
+        event_id = request.POST['event_id']
+        gid = request.POST['gid']
+        tests.insertMember(phone, child_name, name, age, event_id, gid, status, select)
     return render(request, 'test.html')
