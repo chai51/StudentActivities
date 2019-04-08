@@ -289,11 +289,37 @@
                 color: #333;
                 border: 1px solid #333;
             }
-
-        .mui-placeholder {
-            font-size: 13px !important;
-            line-height: 37px !important;
-        }
+			
+		.radioGroup{
+				display:flex;
+				align-items: center;
+				font-size:17px;
+				height:40px;
+				line-height: 40px;
+			}
+			.radio{
+				height:40px;
+				line-height: 40px;
+				width:35%;
+				display:inline-flex;
+				align-items: center;
+				padding-left: 10px;
+			}
+			.radioInput{
+				outline: 0 !important;
+				 -webkit-appearance: none;
+			    width:24px;
+			    height:24px;
+			    border:1px solid #aaa;
+			    border-radius: 100%;
+			    margin-right: 20px;
+			}
+			.radioInput:checked{
+				background-color: #007aff;
+			}
+			.label{
+				width:30%;
+			}
     </style> 
 	<style>
 		div{margin:0;padding:0;}.mui-bar-nav ~ .mui-content{padding-top:5px;}.mui-bar .mui-title{left:0;right:0;}.title{margin:20px 15px 10px;color:#e51c23;font-size:15px;}.titletop{margin:0px;color:black;font-size:20px;border-top:1px solid #c8c7cc;text-align:center;font-weight:bolder;padding:15px 0px;}.mui-content{background-color:white !important;}.title .money{font-size:35px;}.title .group{border:1px solid #ccc;padding:2px 8px;width:100px;}.title .first{border-right:0;color:white;background-color:#e51c23;padding:2px 13px;}.intro{color:#ff9800;}.intro span{font-size:18px;}.liptit{color:#ff4081;margin-bottom:4px !important;}.lipcon{font-size:13px;color:black;}.lipcon .pleft{display:block;float:left;width:28%;}.lipcon .pright{display:block;float:left;width:70%;color:#8a6de9;}.tableh::after{left:0px;}.tableh{padding-left:0;padding-right:0;}.tableh span:first-child{border:0;}.tableh span{display:block;float:left;text-align:center;width:20%;border-left:1px solid black;font-size:13px;height:10px;line-height:10px;color:black;}.join{border:1px solid red;padding:3px 11px;border-radius:13px;color:red;margin-left:6px;}.tablecon p{margin:10px 0;}.tablecon{padding-top:0px;}.mui-pagination  li a{padding:2px 17px;}.page{margin-top:-5px;}.page .total{width:82px;margin-left:14px;margin-top:11px;}.button{text-align:center;margin:20px auto;}.button a{background-color:#3f51b5;color:white;padding:10px 10px;border-radius:5px;}.contul::after{height:0px;}.time{width:256px;margin:0 auto;font-size:13px;padding:4px 0;border-top:1px solid #c8c7cc;border-bottom:1px solid #c8c7cc;text-align:center;}.title .mui-icon-bars{font-size:20px;}.detail:before{left:15px;}.detail p{word-wrap:break-word;word-break:normal;padding:5px 10px 0 15px;}.detail li{padding:0px !important;}.bottom{bottom:0;position:fixed;z-index:10;right:0;left:0;height:70px;border-bottom:0;background-color:white;-webkit-backface-visibility:hidden;backface-visibility:hidden;border-top:1px solid #c8c7cc;}.bottom div{float:left;border:1px solid #c8c7cc;height:70px;font-size:13px;text-align:center;padding:0 5px;border-top:0;}.bottom div p{color:black;margin:0;}.button .joina{display:block;width:150px;margin:0 auto;}.contul::before{height:0;}.mui-input-row .radio{width:30%;margin-top:13px;}.detail2::before{height:0;}.mui-input-group .phone::after{left:0;}.mui-input-group::after{height:0;}.mui-table-view::after{left:15px;}.mui-input-row .mui-btn{padding:5px 15px;}.huodong::after{left:0;}.mui-input-row{width:100%;}.layui-m-layer p{color:white;}.suggest{text-align:left;font-size:14px;background:#e51c23;border-radius:25px;margin:0px 3px;margin-bottom:0px;padding:15px 25px;margin-bottom:10px;}.suggest p{margin:0;color:white;}.mui-backdrop{background-color:rgba(0,0,0,.3) !important;}.mui-popover{height:300px;}.mui-scroll-wrapper{overflow:auto;}#middlePopover table tr{font-size:12px;}#table-1 thead,#table-1 tr{border-top-width:1px;border-top-style:solid;border-top-color:rgb(230,189,189);}#table-1{border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:rgb(230,189,189);}#table-1 td,#table-1 th{padding:5px 0px;font-size:12px;font-family:Verdana;color:rgb(177,106,104);}#table-1 tr:nth-child(2){background-color:rgb(238,211,210)}#table-1 tr:nth-child(odd){background:#FFF;}.mui-popover{background-color:white;}.mui-popover .mui-scroll-wrapper{margin:0;}.you .mui-col-xs-12{display:table;padding:0 5%;}.you .people{margin-bottom:12px;margin-right:15px;display:table-cell;}.you .people p{padding:0;color:black;margin:3px 0;}.progess,.progess p{color:red !important;}.mui-popup-title{display:none;}.mui-popup-text{color:red;font-size:16px;}.mui-popup-text .mui-icon-extra{font-size:35px;}header{display:none;top:0;border:1px solid rgba(142,202,227,0.5) !important;background:rgba(142,202,227,0.5) !important;height:40px !important;font-size:15px;line-height:40px;}a.css-3d-btn:active{position:relative;top:2px;}a.css-3d-btn{background-color:#e51c23;padding:3px 16px;border:1px solid white;border-radius:11px;}.button .twocode{display:block;width:150px;margin:0 auto;}</style>
@@ -304,9 +330,13 @@
 			window.location.href=url;
 		}
 		
-		$("#show_member").click(function(){
-			$("#middlePopover").show(1000);
-		});
+		function showMember(){
+			document.getElementById('middlePopover').style.visibility='visible';	
+		}
+
+		function hideMember(){
+			document.getElementById('middlePopover').style.visibility='hidden';
+		}
 	</script>
  </head> 
  <body> 
@@ -330,7 +360,7 @@
       <div class="intro"> 
        <span class="mui-icon-extra mui-icon-extra-class"></span> 活动简介 
       </div> </a> </li> 
-    <li class="mui-table-view-cell mui-media"> <p class="liptit" style="font-size: 16px;">​{{content}}</p> <p class="lipcon"><span class="pleft">活动主办方：</span><span class="pright">{{organizer}}</span></p> <p class="lipcon"><span class="pleft">主办方电话：</span><span class="pright">{{phone}}</span></p> <p class="lipcon"><span class="pleft">主办方地址：</span><span class="pright">{{address}}</span></p> <p class="lipcon"><span class="pleft">召集人数：</span><span class="pright">200 人</span></p> <p class="lipcon"><span class="pleft">每批人数：</span><span class="pright">6 人/团</span></p> <p class="lipcon"><span class="pleft">活动时间：</span><span class="pright">{{event.start_time|date:"Y-m-d"}}/{{event.end_time|date:"Y-m-d"}}</span></p> </li> 
+    <li class="mui-table-view-cell mui-media"> <p class="liptit" style="font-size: 16px;">​{{content}}</p> <p class="lipcon"><span class="pleft">活动主办方：</span><span class="pright">{{organizer}}</span></p> <p class="lipcon"><span class="pleft">主办方电话：</span><span class="pright">{{phone}}</span></p> <p class="lipcon"><span class="pleft">主办方地址：</span><span class="pright">{{address}}</span></p>  <p class="lipcon"><span class="pleft">活动时间：</span><span class="pright">{{start_time|date:"Y-m-d"}}/{{end_time|date:"Y-m-d"}}</span></p> </li> 
    </ul> 
    <div class="title"> 
    </div> 
@@ -344,15 +374,12 @@
     <li class="mui-table-view-cell mui-media tableh tablecon"> 
      <div class="pagediv page1">
        {% for leader in leaders %} 
-      <p> <span class="stitle" style="width: 13%">{{leader.gid}}</span> <span class="stitle kaiman" style="width: 19%;overflow: hidden;">{{leader.name}}</span> <span class="stitle" style="padding: 0px 5px;font-size: 10px;"> <span style="width: 100%;height: 6px;" class="stitle mui-progressbar mui-progressbar-success" data-progress="10"><span style="width: 100%; transform: translate3d(-90%, 0px, 0px);"></span></span> {{leader.count}}0%</span> <span class="stitle phone" ph="15914183133" style="width: 20%">{{leader.phone}}</span> <span class="stitle" style="width: 24%"><a class="join" href="/activities.html?event_id={{id}}&amp;gid={{leader.gid}}">加入该团</a></span> </p> {% endfor %} 
+      <p> <span class="stitle" style="width: 13%">{{leader.gid}}</span> <span class="stitle kaiman" style="width: 19%;overflow: hidden;">{{leader.name}}</span> <span class="stitle" style="padding: 0px 5px;font-size: 10px;">{{leader.count}}0%</span> <span class="stitle phone" ph="15914183133" style="width: 20%">{{leader.phone}}</span> <span class="stitle" style="width: 24%"><a class="join" href="/activities.html?event_id={{id}}&amp;gid={{leader.gid}}">加入该团</a></span> </p> {% endfor %} 
      </div> 
      <div class="button"> 
       <a href="javascript:void(0);" class="addweixin">添加主办方微信</a> 
      </div> 
-     <div class="time"> 
-      <span>活动时间：</span> 
-      <span style="color: #e51c23;">2019-04-01 ~ 2019-04-04</span> 
-     </div> </li> 
+    </li> 
     <div class="title" style="color: #e51c23;font-size: 17px;margin-top: 5px;"> 
      <span style="color:#e51c23" class="mui-icon mui-icon-bars"></span> 开启活动 
     </div> 
@@ -384,7 +411,6 @@
         </div> 
         <!--其他选项--> 
         <input type="hidden" name="daicount" id="daicount" /> 
-        <div class="otherdiv"> 
          <!--有无代报--> 
          <div class="mui-input-row"> 
           <label><span style="color: red;">&nbsp;&nbsp;</span>选择课程</label> 
@@ -395,21 +421,21 @@
 			{% endfor %} 
 		  </select> 
          </div> 
-         <div class="mui-input-row mui-radio mui-left phone" style="width: 35%;float: right"> 
-          <label>新生</label> 
-          <input name="radio1" type="radio" checked="" value="0" /> 
-         </div> 
-         <div class="mui-input-row mui-radio mui-left phone" style="width: 35%;float: right"> 
-          <label>老生</label> 
-          <input name="radio1" type="radio" value="1" /> 
-         </div> 
-         <div class="mui-input-row mui-radio mui-left phone" style="width: 30%;float: right"> 
-          <label style="padding-left: 15px;"><span style="color: red;">&nbsp;&nbsp;</span>类型</label> 
-         </div> 
-        </div> 
+		          <div class="mui-input-row"> 
+         <div class="radioGroup flex" style="padding-left: 15px;">
+	<span style="color: red;">&nbsp;&nbsp;</span><span class="label">类型</span>
+	<div class="radio">
+		<input class="radioInput" name="radio1" type="radio" value="1">
+		<span class="radiotitle">老生</span>
+	</div>
+	<div class="radio">
+		<input  class="radioInput"  name="radio1" type="radio" checked="" value="0">
+		<span class="radiotitle">新生</span>
+	</div>
+</div> </div> 
        </div> 
        <div class="button"> 
-        <button type="submit" style="margin-top: 25px;"><a style="padding: 6px 20px;background: #e236d9;">发起拼团</a></button> 
+        <button type="submit" style="margin-top: 25px;border: 0;background: transparent;"><a style="padding: 6px 20px;background: #e236d9;">发起拼团</a></button> 
        </div> 
       </form></li> 
     </ul> 
@@ -436,7 +462,7 @@
 			<p class="lipcon"><span class="pleft">活动召集人：</span><span class="pright">{{member.name}}</span></p>
 			{% endif %}
 			{% endfor %}
-			<p class="lipcon"><span class="pleft">当前名额：</span><span class="pright">{{leader|length}}<button id="show_member" style="color: white;background-color: #3f51b5;padding: 3px 8px;border-radius: 3px;float: right;margin-top: -6px;">查看参团人员</button></span></p>
+			<p class="lipcon"><span class="pleft">当前名额：</span><span class="pright">{{leader|length}}<button onclick="showMember()" style="color: white;background-color: #3f51b5;padding: 3px 8px;border-radius: 3px;float: right;margin-top: -6px;">查看参团人员</button></span></p>
 		</li>
 
 
@@ -526,7 +552,6 @@
         </div> 
         <!--其他选项--> 
         <input type="hidden" name="daicount" id="daicount" /> 
-        <div class="otherdiv"> 
          <!--有无代报--> 
          <div class="mui-input-row"> 
           <label><span style="color: red;">&nbsp;&nbsp;</span>选择课程</label> 
@@ -537,26 +562,27 @@
 			{% endfor %} 
 		  </select> 
          </div> 
-         <div class="mui-input-row mui-radio mui-left phone" style="width: 35%;float: right"> 
-          <label>新生</label> 
-          <input name="radio1" type="radio" checked="" value="0" /> 
-         </div> 
-         <div class="mui-input-row mui-radio mui-left phone" style="width: 35%;float: right"> 
-          <label>老生</label> 
-          <input name="radio1" type="radio" value="1" /> 
-         </div> 
-         <div class="mui-input-row mui-radio mui-left phone" style="width: 30%;float: right"> 
-          <label style="padding-left: 15px;"><span style="color: red;">&nbsp;&nbsp;</span>类型</label> 
-         </div> 
-        </div> 
+		          <div class="mui-input-row"> 
+
+         <div class="radioGroup flex" style="padding-left: 15px;">
+	<span style="color: red;">&nbsp;&nbsp;</span><span class="label">类型</span>
+	<div class="radio">
+		<input class="radioInput" name="radio1" type="radio" value="1">
+		<span class="radiotitle">老生</span>
+	</div>
+	<div class="radio">
+		<input  class="radioInput"  name="radio1" type="radio" checked="" value="0">
+		<span class="radiotitle">新生</span>
+	</div>
+</div></div> 
        </div> 
        <div class="button"> 
-        <button type="submit" style="margin-top: 25px;"><a style="padding: 6px 20px;background: #e236d9;">确定参加活动</a></button> 
+        <button type="submit" style="margin-top: 25px;border: 0;background: transparent;"><a style="padding: 6px 20px;background: #e236d9;">确定参加活动</a></button> 
        </div> 
       </form></li> 
     </ul> 
-	
-	<div id="middlePopover" class="mui-popover mui-active" style="display: none; top: 433px; left: 85px;">
+	<div id="middlePopover" onclick="hideMember()" class="model" style="visibility:hidden; position: fixed; width: 100%; height: 100%; top: 0; bottom: 0; overflow: hidden; background-color: rgba(0,0,0,0.6); ">
+	<div class="mui-popover mui-active" style="top: 50%;left: 50%;transform: translate(-50% ,-50%);">
 	<div class="mui-popover-arrow" style="left:6px"></div>
 	<div class="mui-scroll-wrapper">
 		<div class="mui-scroll">
@@ -587,20 +613,18 @@
 		</div>
 	</div>
 </div>
-
+	</div>
    {% endif %}
     <div class="time"> 
      <span>活动时间：</span> 
-     <span style="color: #e51c23;">2019-04-01 ~ 2019-04-04</span> 
+     <span style="color: #e51c23;">{{start_time|date:"Y-m-d"}}/{{end_time|date:"Y-m-d"}}</span> 
     </div> 
     <div class="title" style="color: #ff9800;font-size: 17px;"> 
      <span class="mui-icon mui-icon-bars"></span> 活动详情 
     </div> 
     <ul class="mui-table-view mui-table-view-chevron detail"> 
-     <li class="mui-table-view-cell mui-media"> <p><span style="font-size: 16px; color: rgb(0, 0, 0);">{{detail}}</span></p><p><span style="color: rgb(255, 0, 0); font-size: 20px;">本次课程说明：</span></p><p><span style="color: rgb(255, 0, 0);">1、老生为叠加课时，新生才会进行排课。</span></p><p><span style="color: rgb(255, 0, 0);">2、1周1/2次课，1个半月12课时，将尽量根据孩子的时间来排课。</span></p><p><span style="font-size: 20px; color: rgb(0, 176, 240);">不是体验课时！不是体验课时！</span></p><p><span style="color: rgb(255, 0, 0);">学生上课后，如续报课程内容还可以继续进行延续。</span></p><p><img src="/static/{{id}}/1553844335535031.png" title="1553844335535031.png" alt="detail.png" /></p> 
-      <div style="text-align: center;margin: 20px;margin-bottom: 100px;">
-       <a href="tel:18123979069" style="color: white;background-color: #3f51b5;padding: 10px 10px;border-radius: 5px;">拨打主办方电话</a>
-      </div> </li> 
+     <li class="mui-table-view-cell mui-media"><p><img src="/static/{{id}}/1553844335535031.png" title="1553844335535031.png" alt="detail.png" /></p> 
+      </li> 
     </ul> 
    </ul>
   </div> 
@@ -610,7 +634,7 @@
      <span style="font-size: 30px;padding-top: 8px;color: black;" class="mui-icon-extra mui-icon-extra-computer"></span> 
      <p>活动主页</p> 
     </div> </a> 
-   <a href="tel:18138287955" style="color: black;"> 
+   <a href="tel:{{phone}}" style="color: black;"> 
     <div style="width: 24%">
      <span style="font-size: 30px;padding-top: 9px;" class="mui-icon mui-icon-chatboxes"></span>
      <p>活动咨询</p>
