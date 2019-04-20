@@ -45,14 +45,7 @@
   <ItemGroup>
     <Folder Include="app\" />
     <Folder Include="app\migrations\" />
-    <Folder Include="app\static\" />
-    <Folder Include="app\templates\" />
     <Folder Include="StudentActivities\" />
-    <Folder Include="templates\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="db.sqlite3" />
-    <Content Include="templates\activities_base.html" />
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="{9a7a9026-48c1-4688-9d5d-e5699d47d074}\3.5" />

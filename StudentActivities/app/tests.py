@@ -1,42 +1,38 @@
-from django.test import TestCase
-from . import models
+import qrcode 
+from PIL import Image, ImageFont, ImageDraw
 
 # Create your tests here.
 
-# 团长
-def insertLeader(phone, child_name, name, age, event_id, status, course_id):
-    leader = models.Student(phone=phone, child_name=child_name, name=name, age=age, event_id=event_id, status=status, course_id=course_id)
-    leader.save()
-    leader.gid = leader.id
-    leader.save()
+# 生成二维码海报
+def createQRCodeEx(bk, name, content, url, savePath):
+    fontSize = 50
+    font = ImageFont.truetype('static/handBook.ttf', fontSize)
+    font2 = ImageFont.truetype('static/pudding.ttf', fontSize)
 
-# 团员
-def insertMember(phone, child_name, name, age, event_id, gid, status, course_id):
-    member = models.Student(gid=gid, phone=phone, child_name=child_name, name=name, age=age, event_id=event_id, status=status, course_id=course_id)
-    member.save()
+    image = Image.open(bk).convert('RGBA')
+    draw = ImageDraw.Draw(image)
+    width, height = image.size
 
-# 查询团购进程以及团长信息
-def queryLeaders(event_id):
-    leaders = models.Student.objects.filter(event_id=event_id,gid=models.F("id")).order_by("gid").values()
-    cnts = models.Student.objects.filter(event_id=event_id).order_by("gid").values("gid").annotate(cnt=models.Count("gid"))
+    y = height * 0.7
+    draw.text((width*0.5 - len(name)*fontSize*0.5 , y), name, fill=(255,0,0,255), font=font)
+    y = y + fontSize * 1.1
+    draw.text((width*0.5 - len(content)*fontSize*0.5 , y), content, fill=(0,0,0,255), font=font2)
 
-    for i in range(0, len(leaders)):
-        leaders[i]["count"] = cnts[i]["cnt"]
-        leaders[i]["phone"] = leaders[i]["phone"][:3] + "****" + leaders[i]["phone"][7:]
-    return leaders
+    qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
+    qr.add_data(url)
+    qr.make(fit=True)
+    qr_code = qr.make_image()
+    qr_code2 = qr_code.resize((128, 128))
+    
+    x = int(width*0.5 - qr_code2.size[0]*0.5)
+    y = int(y + fontSize * 1.1)
+    image.paste(qr_code2, box=(x,y))
+    #draw.bitmap((x,y), qr_code)
+    image.save(savePath, "png")
 
-# 查询一个团的详细信息
-def queryLeader(gid):
-    leader = models.Student.objects.filter(gid=gid).values()
-    for i in range(0, len(leader)):
-        leader[i]["phone"] = leader[i]["phone"][:3] + "****" + leader[i]["phone"][7:]
-    return leader
+def createQRCode(url, savePath):
+    image = qr_code = qrcode.make(url)
+    image.save(savePath)
 
-def queryEvent(event_id):
-    return models.Event.objects.filter(id=event_id).values()[0]
-
-def queryEvents():
-    return models.Event.objects.order_by("-id").values()
-
-def queryCourses(event_id):
-    return models.Course.objects.filter(event_id=event_id).values()
+def convertImgFmt(inFile, outFile):
+    Image.open(inFile).save(outFile)

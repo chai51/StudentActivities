@@ -1,84 +1,497 @@
-from django.shortcuts import render
+from django.http import JsonResponse
+import django
 import os
+import json
 from . import models
 from . import tests
-from StudentActivities import settings
+
 
 # Create your views here.
 
 def login(request):
-    return render(request, 'login.html')
-
-def login2(request):
+    data = {"code": "2", "info":"wrong request method"}
     if request.method == 'POST':
-        #print (str(models.User.objects.filter(user="chai").query))
-        values = models.User.objects.filter(user=request.POST['user']).values()
-        passwd = request.POST['passwd']
+        postBody = {}
+        try:
+            postBody = json.loads(request.body.decode())
+        except json.decoder.JSONDecodeError:
+            data = {"code": "3", "info":"JSON format is incorrect"}
+            return JsonResponse(data, safe=False)
 
-        #print ("query:{0} ,post:{1}".format(values[0]['passwd'], request.POST['passwd']))
-        if (values[0]['passwd'] == request.POST['passwd']):
-            pass
-        else:
-            print ("passwd error")
-            return render(request, 'login.html', {"error":"user or passwd error"})
+        user = postBody.get("user")
+        passwd = postBody.get("passwd")
+        if user is None or passwd is None:
+            data = {"code": "3", "info":"Missing at least one parameter : user passwd"}
+            return JsonResponse(data, safe=False)
         
-        events = tests.queryEvents()
-        print ("events:{0}".format(events))
-        return render(request, 'index.html', {"events":events})
+        values = list(models.User.objects.filter(user=user).values())
+        if len(values) == 0:
+            data = {"code": "10", "info":"Username not found"}
+            return JsonResponse(data, safe=False)
+        
+        passwd2 = values[0].pop("passwd")
+        if (passwd2 == passwd):
+            data = {"code": "1", "info":"", "data":values}
+        else:
+            data = {"code": "10", "info":"wrong username or password"}
+    return JsonResponse(data, safe=False)
 
-def activities(request):
-    eventInfo = dict()
+def activity(request):
+    data = {"code": "2", "info":"wrong request method"}
     if request.method == 'GET':
-        event_id = request.GET['event_id']
-        eventInfo = tests.queryEvent(event_id)
+        values = list(models.Activity.objects.order_by("-id").values())
+        data = {"code": "1", "info":"", "data":values}
+    return JsonResponse(data, safe=False)
 
+def leaders(request):
+    data = {"code": "2", "info":"wrong request method"}
+    if request.method == 'GET':
+        activity_id = request.GET.get('activity_id')
+        if activity_id is None:
+            data = {"code": "3", "info":"Missing at least one parameter : activity_id"}
+            return JsonResponse(data, safe=False)
+        
+        values = list(models.Student.objects.filter(activity_id=activity_id,gid=models.F("id")).order_by("gid").values())
+        values2 = list(models.Student.objects.filter(activity_id=activity_id).order_by("gid").values("gid").annotate(cnt=models.Count("gid")))
+        # 将查询数据融合，设置电话号码部分不可见
+        for i in range(0, len(values)):
+            values[i]["count"] = values2[i]["cnt"]
+            values[i]["phone"] = values[i]["phone"][:3] + "****" + values[i]["phone"][7:]
+        
+        data = {"code": "1", "info":"", "data":values}
+    return JsonResponse(data, safe=False)
+
+def members(request):
+    data = {"code": "2", "info":"wrong request method"}
+    if request.method == 'GET':
         gid = request.GET.get('gid')
         if gid is None:
-            eventInfo["leaders"] = tests.queryLeaders(event_id)
-            eventInfo["courses"] = tests.queryCourses(event_id)
-        else:
-            eventInfo["leader"] = tests.queryLeader(gid)
-            eventInfo["count"] = len(eventInfo["leader"])
-            eventInfo["courses"] = tests.queryCourses(event_id)
+            data = {"code": "3", "info":"Missing at least one parameter : gid"}
+            return JsonResponse(data, safe=False)
 
-    print ("eventInfo:{0}".format(eventInfo))
-    return render(request, 'activities{0}.html'.format(event_id), eventInfo)
+        values = list(models.Student.objects.filter(gid=gid).values())
+        # 设置电话号码部分不可见
+        for i in range(0, len(values)):
+            values[i]["phone"] = values[i]["phone"][:3] + "****" + values[i]["phone"][7:]
+        data = {"code": "1", "info":"", "data":values}
+    return JsonResponse(data, safe=False)
 
-def upload(request):
+def course(request):
+    data = {"code": "2", "info":"wrong request method"}
+    if request.method == 'GET':
+        activity_id = request.GET.get('activity_id')
+        if activity_id is None:
+            data = {"code": "3", "info":"Missing at least one parameter : activity_id"}
+            return JsonResponse(data, safe=False)
+
+        values = list(models.Course.objects.filter(activity_id=activity_id).values())
+        data = {"code": "1", "info":"", "data":values}
+    return JsonResponse(data, safe=False)
+
+def createActivity(request):
+    data = {"code": "2", "info":"wrong request method"}
     if request.method == 'POST':
-        obj = request.FILES.get('uploadfile')
-        print ("file name:{0}".format(obj.name))
-        path = os.path.join(settings.BASE_DIR, 'static', '1000')
+        postBody = {}
+        try:
+            postBody = json.loads(request.body.decode())
+        except json.decoder.JSONDecodeError:
+            data = {"code": "3", "info":"JSON format is incorrect"}
+            return JsonResponse(data, safe=False)
+
+        activity = models.Activity()
+        title = postBody.get("title")
+        if not title is None:
+            activity.title = title
+        content = postBody.get("content")
+        if not content is None:
+            activity.content = content
+        organizer = postBody.get("organizer")
+        if not organizer is None:
+            activity.organizer = organizer
+        phone = postBody.get("phone")
+        if not phone is None:
+            activity.phone = phone        
+        address = postBody.get("address")
+        if not address is None:
+            activity.address = address        
+        convener = postBody.get("convener")
+        if not convener is None:
+            activity.convener = convener      
+        detail = postBody.get("detail")
+        if not detail is None:
+            activity.detail = detail      
+        start_time = postBody.get("start_time")
+        if not start_time is None:
+            activity.start_time = start_time
+        end_time = postBody.get("end_time")
+        if not end_time is None:
+            activity.end_time = end_time
+        price1 = postBody.get("price1")
+        if not price1 is None:
+            activity.price1 = price1
+        price2 = postBody.get("price2")
+        if not price2 is None:
+            activity.price2 = price2    
+        price3 = postBody.get("price3")
+        if not price3 is None:
+            activity.price3 = price3
+
+        try:
+            activity.save()
+        except django.core.exceptions.ValidationError as e:
+            data = {"code": "3", "info":"{}".format(e)}
+            return JsonResponse(data, safe=False)
+
+        data = {"code": "1", "info":"", "data":[{"id":activity.id}]}
+    return JsonResponse(data, safe=False)
+
+def updateActivity(request):
+    data = {"code": "2", "info":"wrong request method"}
+    if request.method == 'POST':
+        postBody = {}
+        try:
+            postBody = json.loads(request.body.decode())
+        except json.decoder.JSONDecodeError:
+            data = {"code": "3", "info":"JSON format is incorrect"}
+            return JsonResponse(data, safe=False)
+
+        activity_id = postBody.get('activity_id')
+        if activity_id is None:
+            data = {"code": "3", "info":"Missing at least one parameter : activity_id"}
+            return JsonResponse(data, safe=False)
+
+        activity = models.Activity()
+        try:
+            activity = models.Activity.objects.get(id=activity_id)
+        except models.Activity.DoesNotExist:
+            data = {"code": "4", "info":"no data found"}
+            return JsonResponse(data, safe=False)
+
+        title = postBody.get("title")
+        if not title is None:
+            activity.title = title
+        content = postBody.get("content")
+        if not content is None:
+            activity.content = content
+        organizer = postBody.get("organizer")
+        if not organizer is None:
+            activity.organizer = organizer
+        phone = postBody.get("phone")
+        if not phone is None:
+            activity.phone = phone        
+        address = postBody.get("address")
+        if not address is None:
+            activity.address = address        
+        convener = postBody.get("convener")
+        if not convener is None:
+            activity.convener = convener      
+        detail = postBody.get("detail")
+        if not detail is None:
+            activity.detail = detail      
+        start_time = postBody.get("start_time")
+        if not start_time is None:
+            activity.start_time = start_time      
+        end_time = postBody.get("end_time")
+        if not end_time is None:
+            activity.end_time = end_time      
+        price1 = postBody.get("price1")
+        if not price1 is None:
+            activity.price1 = price1
+        price2 = postBody.get("price2")
+        if not price2 is None:
+            activity.price2 = price2    
+        price3 = postBody.get("price3")
+        if not price3 is None:
+            activity.price3 = price3
+
+        try:
+            activity.save()
+        except django.core.exceptions.ValidationError as e:
+            data = {"code": "3", "info":"{}".format(e)}
+            return JsonResponse(data, safe=False)
+
+        data = {"code": "1", "info":""}
+    return JsonResponse(data, safe=False)
+
+def updateActivity2(request):
+    data = {"code": "2", "info":"wrong request method"}
+    if request.method == 'POST':
+        activity_id = request.POST.get('activity_id')
+        if activity_id is None:
+            data = {"code": "3", "info":"Missing at least one parameter : activity_id"}
+            return JsonResponse(data, safe=False)
+
+        activity = models.Activity()
+        try:
+            activity = models.Activity.objects.get(id=activity_id)
+        except models.Activity.DoesNotExist:
+            data = {"code": "4", "info":"no data found"}
+            return JsonResponse(data, safe=False)
+
+        path = os.path.join('static', str(activity.id))
         if os.path.exists(path) == False:
             os.makedirs(path)
-        fw = open(os.path.join(path, obj.name), 'wb')
-        for chunk in obj.chunks():
-            fw.write(chunk)
-        fw.close()
-    return render(request, 'test.html')
-        
-def create(request):
-    if request.method == 'POST':
-        child_name = request.POST['kaiman']
-        phone = request.POST['phone']
-        age = request.POST['baomin0']
-        name = request.POST['baomin1']
-        select = request.POST['select']
-        status = request.POST['radio1']
-        event_id = request.POST['event_id']
-        print ("child name:{}, phone:{}, age:{}, name:{}, select:{}, radio1:{}".format(child_name, phone, age, name, select, status))
-        tests.insertLeader(phone, child_name, name, age, event_id, status, select)
-    return render(request, 'test.html')
 
-def join(request):
+        head_img = request.FILES.get('head_img')
+        if not head_img is None:
+            activity.head_img = os.path.join(path, head_img.name)
+            fw = open(activity.head_img, 'wb')
+            for chunk in head_img.chunks():
+                fw.write(chunk)
+            fw.close()
+            newFile = os.path.join(path, "head_img.png")
+            if activity.head_img != newFile:
+                tests.convertImgFmt(activity.head_img, newFile)
+                os.remove(activity.head_img)
+                activity.head_img = newFile
+
+        tail_img = request.FILES.get('tail_img')
+        if not tail_img is None:
+            activity.tail_img = os.path.join(path, tail_img.name)
+            fw = open(activity.tail_img, 'wb')
+            for chunk in tail_img.chunks():
+                fw.write(chunk)
+            fw.close()
+            newFile = os.path.join(path, "tail_img.png")
+            if activity.tail_img != newFile:
+                tests.convertImgFmt(activity.tail_img, newFile)
+                os.remove(activity.tail_img)
+                activity.tail_img = newFile
+
+        organizer_qrcode = request.FILES.get('organizer_qrcode')
+        if not organizer_qrcode is None:
+            activity.organizer_qrcode = os.path.join(path, organizer_qrcode.name)
+            fw = open(activity.organizer_qrcode, 'wb')
+            for chunk in organizer_qrcode.chunks():
+                fw.write(chunk)
+            fw.close()
+            newFile = os.path.join(path, "organizer_qrcode.png")
+            if activity.organizer_qrcode != newFile:
+                tests.convertImgFmt(activity.organizer_qrcode, newFile)
+                os.remove(activity.organizer_qrcode)
+                activity.organizer_qrcode = newFile
+
+        leader_qrcode_bg = request.FILES.get('leader_qrcode_bg')
+        if not leader_qrcode_bg is None:
+            activity.leader_qrcode_bg = os.path.join(path, leader_qrcode_bg.name)
+            fw = open(activity.leader_qrcode_bg, 'wb')
+            for chunk in leader_qrcode_bg.chunks():
+                fw.write(chunk)
+            fw.close()
+            newFile = os.path.join(path, "leader_qrcode_bg.png")
+            if activity.leader_qrcode_bg != newFile:
+                tests.convertImgFmt(activity.leader_qrcode_bg, newFile)
+                os.remove(activity.leader_qrcode_bg)
+                activity.leader_qrcode_bg = newFile
+
+        activity.save()
+        data = {"code": "1", "info":"", "data":[{"head_img":activity.head_img, "tail_img":activity.tail_img, "organizer_qrcode":activity.organizer_qrcode, "leader_qrcode_bg":activity.leader_qrcode_bg}]}
+    return JsonResponse(data, safe=False)
+
+def createLeader(request):
+    data = {"code": "2", "info":"wrong request method"}
     if request.method == 'POST':
-        child_name = request.POST['kaiman']
-        phone = request.POST['phone']
-        age = request.POST['baomin0']
-        name = request.POST['baomin1']
-        select = request.POST['select']
-        status = request.POST['radio1']
-        event_id = request.POST['event_id']
-        gid = request.POST['gid']
-        tests.insertMember(phone, child_name, name, age, event_id, gid, status, select)
-    return render(request, 'test.html')
+        postBody = {}
+        try:
+            postBody = json.loads(request.body.decode())
+        except json.decoder.JSONDecodeError:
+            data = {"code": "3", "info":"JSON format is incorrect"}
+            return JsonResponse(data, safe=False)
+
+        activity_id = postBody.get("activity_id")
+        if activity_id is None:
+            data = {"code": "3", "info":"Missing at least one parameter : activity_id"}
+            return JsonResponse(data, safe=False)
+
+        student = models.Student()
+        student.activity_id = activity_id
+        phone = postBody.get("phone")
+        if not phone is None:
+            student.phone = phone
+        child_name = postBody.get("child_name")
+        if not child_name is None:
+            student.child_name = child_name
+        name = postBody.get("name")
+        if not name is None:
+            student.name = name
+        age = postBody.get("age")
+        if not age is None:
+            student.age = age
+        course_id = postBody.get("course_id")
+        if not course_id is None:
+            student.course_id = course_id
+        status = postBody.get("status")
+        if not status is None:
+            student.status = status
+        student.save()
+
+        student.gid = student.id
+
+        urlQRCode = "activity_id={}&gid={}".format(student.activity_id, student.gid)
+        pathQRCode = os.path.join('static', str(student.activity_id), str(student.gid)+".png")
+        tests.createQRCodeEx(
+            os.path.join('static', str(student.activity_id), "leader_qrcode_bg.png"),
+            name,
+            "邀请你一起来报课",
+            urlQRCode,
+            pathQRCode
+        )
+
+        student.qr_code = pathQRCode
+        student.save()
+
+        data = {"code": "1", "info":"", "data":[{"id":student.id, "gid":student.gid, "qr_code":student.qr_code}]}
+    return JsonResponse(data, safe=False)
+
+def joinLeader(request):
+    data = {"code": "2", "info":"wrong request method"}
+    if request.method == 'POST':
+        postBody = {}
+        try:
+            postBody = json.loads(request.body.decode())
+        except json.decoder.JSONDecodeError:
+            data = {"code": "3", "info":"JSON format is incorrect"}
+            return JsonResponse(data, safe=False)
+
+        activity_id = postBody.get("activity_id")
+        gid = postBody.get("gid")
+        if activity_id is None or gid is None:
+            data = {"code": "3", "info":"Missing at least one parameter : activity_id gid"}
+            return JsonResponse(data, safe=False)
+
+        student = models.Student()
+        student.activity_id = activity_id
+        student.gid = gid
+        phone = postBody.get("phone")
+        if not phone is None:
+            student.phone = phone
+        child_name = postBody.get("child_name")
+        if not child_name is None:
+            student.child_name = child_name
+        name = postBody.get("name")
+        if not name is None:
+            student.name = name
+        age = postBody.get("age")
+        if not age is None:
+            student.age = age
+        course_id = postBody.get("course_id")
+        if not course_id is None:
+            student.course_id = course_id
+        status = postBody.get("status")
+        if not status is None:
+            student.status = status
+        student.save()
+
+
+        data = {"code": "1", "info":"", "data":[{"id":student.id}]}
+    return JsonResponse(data, safe=False)
+
+def createCourse(request):
+    data = {"code": "2", "info":"wrong request method"}
+    if request.method == 'POST':
+        postBody = {}
+        try:
+            postBody = json.loads(request.body.decode())
+        except json.decoder.JSONDecodeError:
+            data = {"code": "3", "info":"JSON format is incorrect"}
+            return JsonResponse(data, safe=False)
+
+        activity_id = postBody.get("activity_id")
+        if activity_id is None:
+            data = {"code": "3", "info":"Missing at least one parameter : activity_id"}
+            return JsonResponse(data, safe=False)
+
+        course = models.Course()
+        course.activity_id = activity_id
+        content = postBody.get("content")
+        if not content is None:
+            course.content = content
+        course.save()
+
+        data = {"code": "1", "info":"", "data":[{"id":course.id}]}
+    return JsonResponse(data, safe=False)
+
+def updateCourse(request):
+    data = {"code": "2", "info":"wrong request method"}
+    if request.method == 'POST':
+        postBody = {}
+        try:
+            postBody = json.loads(request.body.decode())
+        except json.decoder.JSONDecodeError:
+            data = {"code": "3", "info":"JSON format is incorrect"}
+            return JsonResponse(data, safe=False)
+
+        course_id = postBody.get("course_id")
+        if course_id is None:
+            data = {"code": "3", "info":"Missing at least one parameter : course_id"}
+            return JsonResponse(data, safe=False)
+
+        course = models.Course()
+        try:
+            course = models.Course.objects.get(id=course_id)
+        except models.Course.DoesNotExist:
+            data = {"code": "4", "info":"no data found"}
+            return JsonResponse(data, safe=False)
+
+        content = postBody.get("content")
+        if not content is None:
+            course.content = content
+        course.save()
+
+        data = {"code": "1", "info":""}
+    return JsonResponse(data, safe=False)
+
+def deleteCourse(request):
+    data = {"code": "2", "info":"wrong request method"}
+    if request.method == 'POST':
+        postBody = {}
+        try:
+            postBody = json.loads(request.body.decode())
+        except json.decoder.JSONDecodeError:
+            data = {"code": "3", "info":"JSON format is incorrect"}
+            return JsonResponse(data, safe=False)
+
+        course_id = postBody.get("course_id")
+        if course_id is None:
+            data = {"code": "3", "info":"Missing at least one parameter : course_id"}
+            return JsonResponse(data, safe=False)
+
+        course = models.Course()
+        try:
+            course = models.Course.objects.get(id=course_id)
+        except models.Course.DoesNotExist:
+            data = {"code": "1", "info":""}
+            return JsonResponse(data, safe=False)
+
+        course.delete()
+        data = {"code": "1", "info":""}
+    return JsonResponse(data, safe=False)
+
+def deleteMember(request):
+    data = {"code": "2", "info":"wrong request method"}
+    if request.method == 'POST':
+        postBody = {}
+        try:
+            postBody = json.loads(request.body.decode())
+        except json.decoder.JSONDecodeError:
+            data = {"code": "3", "info":"JSON format is incorrect"}
+            return JsonResponse(data, safe=False)
+
+        uid = postBody.get("uid")
+        if uid is None:
+            data = {"code": "3", "info":"Missing at least one parameter : uid"}
+            return JsonResponse(data, safe=False)
+
+        student = models.Student()
+        try:
+            student = models.Student.objects.get(id=uid)
+        except models.Student.DoesNotExist:
+            data = {"code": "1", "info":""}
+            return JsonResponse(data, safe=False)
+
+        student.delete()
+        data = {"code": "1", "info":""}
+    return JsonResponse(data, safe=False)
+
+def test(request):
+    return JsonResponse({"code":"1", "info":"test"}, safe=False)

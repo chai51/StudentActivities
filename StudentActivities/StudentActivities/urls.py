@@ -18,15 +18,21 @@ from django.conf.urls import url
 from app import views as app_views
 
 urlpatterns = [
-    url('admin/', admin.site.urls),
+    url(r'^login$', app_views.login),
+    url(r'^activity$', app_views.activity),
+    url(r'^leaders$', app_views.leaders),
+    url(r'^members$', app_views.members),
+    url(r'^course$', app_views.course),
 
-    url(r'^$', app_views.login),
-    url(r'^login.html$', app_views.login),
-    url(r'^login$', app_views.login2),
+    url(r'^createActivity$', app_views.createActivity),
+    url(r'^updateActivity$', app_views.updateActivity),
+    url(r'^updateActivity2$', app_views.updateActivity2),    
+    url(r'^createLeader', app_views.createLeader),
+    url(r'^joinLeader', app_views.joinLeader),
+    url(r'^createCourse', app_views.createCourse),
+    url(r'^updateCourse', app_views.updateCourse),
+    url(r'^deleteCourse', app_views.deleteCourse),
+    url(r'^deleteMember', app_views.deleteMember),
 
-    url(r'^activities.html$', app_views.activities),
-    url(r'^upload/$', app_views.upload),
-
-    url(r'^create', app_views.create),
-    url(r'^join', app_views.join)
+    url(r'^test$', app_views.test)
 ]
