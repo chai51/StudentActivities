@@ -1,9 +1,11 @@
 from django.http import JsonResponse
+from django.conf import settings
 import django
 import os
 import json
 from . import models
 from . import tests
+import hashlib
 
 
 # Create your views here.
@@ -228,7 +230,7 @@ def updateActivity2(request):
             data = {"code": "4", "info":"no data found"}
             return JsonResponse(data, safe=False)
 
-        path = os.path.join('static', str(activity.id))
+        path = os.path.join(settings.STATIC_ROOT, str(activity.id))
         if os.path.exists(path) == False:
             os.makedirs(path)
 
@@ -243,7 +245,7 @@ def updateActivity2(request):
             if activity.head_img != newFile:
                 tests.convertImgFmt(activity.head_img, newFile)
                 os.remove(activity.head_img)
-                activity.head_img = newFile
+            activity.head_img = tests.convertPath(newFile)
 
         tail_img = request.FILES.get('tail_img')
         if not tail_img is None:
@@ -256,7 +258,7 @@ def updateActivity2(request):
             if activity.tail_img != newFile:
                 tests.convertImgFmt(activity.tail_img, newFile)
                 os.remove(activity.tail_img)
-                activity.tail_img = newFile
+            activity.tail_img = tests.convertPath(newFile)
 
         organizer_qrcode = request.FILES.get('organizer_qrcode')
         if not organizer_qrcode is None:
@@ -269,7 +271,7 @@ def updateActivity2(request):
             if activity.organizer_qrcode != newFile:
                 tests.convertImgFmt(activity.organizer_qrcode, newFile)
                 os.remove(activity.organizer_qrcode)
-                activity.organizer_qrcode = newFile
+            activity.organizer_qrcode = tests.convertPath(newFile)
 
         leader_qrcode_bg = request.FILES.get('leader_qrcode_bg')
         if not leader_qrcode_bg is None:
@@ -282,7 +284,7 @@ def updateActivity2(request):
             if activity.leader_qrcode_bg != newFile:
                 tests.convertImgFmt(activity.leader_qrcode_bg, newFile)
                 os.remove(activity.leader_qrcode_bg)
-                activity.leader_qrcode_bg = newFile
+            activity.leader_qrcode_bg = tests.convertPath(newFile)
 
         activity.save()
         data = {"code": "1", "info":"", "data":[{"head_img":activity.head_img, "tail_img":activity.tail_img, "organizer_qrcode":activity.organizer_qrcode, "leader_qrcode_bg":activity.leader_qrcode_bg}]}
@@ -328,16 +330,16 @@ def createLeader(request):
         student.gid = student.id
 
         urlQRCode = "activity_id={}&gid={}".format(student.activity_id, student.gid)
-        pathQRCode = os.path.join('static', str(student.activity_id), str(student.gid)+".png")
+        pathQRCode = os.path.join(settings.STATIC_ROOT, str(student.activity_id), str(student.gid)+".png")
         tests.createQRCodeEx(
-            os.path.join('static', str(student.activity_id), "leader_qrcode_bg.png"),
+            os.path.join(settings.STATIC_ROOT, str(student.activity_id), "leader_qrcode_bg.png"),
             name,
             "邀请你一起来报课",
             urlQRCode,
             pathQRCode
         )
 
-        student.qr_code = pathQRCode
+        student.qr_code = tests.convertPath(pathQRCode)
         student.save()
 
         data = {"code": "1", "info":"", "data":[{"id":student.id, "gid":student.gid, "qr_code":student.qr_code}]}
@@ -491,6 +493,34 @@ def deleteMember(request):
 
         student.delete()
         data = {"code": "1", "info":""}
+    return JsonResponse(data, safe=False)
+
+def qrCode(request):
+    data = {"code": "2", "info":"wrong request method"}
+    if request.method == 'POST':
+        postBody = {}
+        try:
+            postBody = json.loads(request.body.decode())
+        except json.decoder.JSONDecodeError:
+            data = {"code": "3", "info":"JSON format is incorrect"}
+            return JsonResponse(data, safe=False)
+
+        dataSrc = postBody.get("data")
+        if dataSrc is None:
+            data = {"code": "3", "info":"Missing at least one parameter : data"}
+            return JsonResponse(data, safe=False)
+        md5 = hashlib.md5()
+        md5.update(dataSrc.encode("utf-8"))
+        dataDst = md5.hexdigest()
+
+        path = os.path.join(settings.STATIC_ROOT, "tmp")
+        if os.path.exists(path) == False:
+            os.makedirs(path)
+
+        file = os.path.join(path, "{}.png".format(dataDst))
+        if os.path.exists(file) == False:
+            tests.createQRCode(dataSrc, file)
+        data = {"code": "1", "info":"", "data":[{"qr_code":tests.convertPath(file)}]}
     return JsonResponse(data, safe=False)
 
 def test(request):

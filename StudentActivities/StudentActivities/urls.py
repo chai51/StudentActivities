@@ -34,5 +34,7 @@ urlpatterns = [
     url(r'^deleteCourse', app_views.deleteCourse),
     url(r'^deleteMember', app_views.deleteMember),
 
+    url(r'^qrCode', app_views.qrCode),
+
     url(r'^test$', app_views.test)
 ]

@@ -36,3 +36,9 @@ def createQRCode(url, savePath):
 
 def convertImgFmt(inFile, outFile):
     Image.open(inFile).save(outFile)
+
+def convertPath(inPath):
+    path = "/var/nginx/html"
+    if path in inPath:
+        return inPath[len(path):]
+    return inPath
