@@ -2,6 +2,7 @@ import qrcode
 from PIL import Image, ImageFont, ImageDraw
 
 # Create your tests here.
+staticResUrl = ''
 
 # 生成二维码海报
 def createQRCodeEx(bk, name, content, url, savePath):

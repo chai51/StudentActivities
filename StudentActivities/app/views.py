@@ -41,7 +41,11 @@ def login(request):
 def activity(request):
     data = {"code": "2", "info":"wrong request method"}
     if request.method == 'GET':
-        values = list(models.Activity.objects.order_by("-id").values())
+        activity_id = request.GET.get('activity_id')
+        if activity_id is None:
+            values = list(models.Activity.objects.order_by("-id").values())
+        else:
+            values = list(models.Activity.objects.filter(id=activity_id).values())
         data = {"code": "1", "info":"", "data":values}
     return JsonResponse(data, safe=False)
 
@@ -329,7 +333,7 @@ def createLeader(request):
 
         student.gid = student.id
 
-        urlQRCode = "activity_id={}&gid={}".format(student.activity_id, student.gid)
+        urlQRCode = "{}/app/index.html#/joined?activity_id={}&gid={}".format(tests.staticResUrl, student.activity_id, student.gid)
         pathQRCode = os.path.join(settings.STATIC_ROOT, str(student.activity_id), str(student.gid)+".png")
         tests.createQRCodeEx(
             os.path.join(settings.STATIC_ROOT, str(student.activity_id), "leader_qrcode_bg.png"),
@@ -403,14 +407,19 @@ def createCourse(request):
             data = {"code": "3", "info":"Missing at least one parameter : activity_id"}
             return JsonResponse(data, safe=False)
 
-        course = models.Course()
-        course.activity_id = activity_id
-        content = postBody.get("content")
-        if not content is None:
-            course.content = content
-        course.save()
+        data = {"code": "1", "info":"", "data":[]}
+        courses = postBody.get("courses")
+        if not courses is None:
+            for val in courses:
+                course = models.Course()
 
-        data = {"code": "1", "info":"", "data":[{"id":course.id}]}
+                course.activity_id = activity_id
+                content = val.get("content")
+                if not content is None:
+                    course.content = content
+                    course.save()
+                    data["data"].append({"id":course.id, "content":content})
+
     return JsonResponse(data, safe=False)
 
 def updateCourse(request):
@@ -506,9 +515,15 @@ def qrCode(request):
             return JsonResponse(data, safe=False)
 
         dataSrc = postBody.get("data")
+        ipPrefix = postBody.get("ipPrefix")
         if dataSrc is None:
             data = {"code": "3", "info":"Missing at least one parameter : data"}
             return JsonResponse(data, safe=False)
+        ipPrefix = (True if (ipPrefix is None) else ipPrefix)
+
+        if ipPrefix:
+            dataSrc = tests.staticResUrl + dataSrc
+
         md5 = hashlib.md5()
         md5.update(dataSrc.encode("utf-8"))
         dataDst = md5.hexdigest()
