@@ -5,19 +5,22 @@ from PIL import Image, ImageFont, ImageDraw
 staticResUrl = ''
 
 # 生成二维码海报
-def createQRCodeEx(bk, name, content, url, savePath):
+def createQRCodeEx(bk, name, content, url, savePath, description):
     fontSize = 50
+    fontSize2 = int(fontSize/2)
     font = ImageFont.truetype('static/handBook.ttf', fontSize)
-    font2 = ImageFont.truetype('static/pudding.ttf', fontSize)
+    font2 = ImageFont.truetype('static/pudding.ttf', fontSize2)
 
     image = Image.open(bk).convert('RGBA')
     draw = ImageDraw.Draw(image)
     width, height = image.size
 
+    x = width*0.5 - (len(name)*fontSize*0.5 + len(content)*fontSize2*0.5)
     y = height * 0.7
-    draw.text((width*0.5 - len(name)*fontSize*0.5 , y), name, fill=(255,0,0,255), font=font)
-    y = y + fontSize * 1.1
-    draw.text((width*0.5 - len(content)*fontSize*0.5 , y), content, fill=(0,0,0,255), font=font2)
+    draw.text((x, y), name, fill=(153,0,153,255), font=font)
+    x = x + len(name)*fontSize
+    y = y + fontSize2
+    draw.text((x, y), content, fill=(255,255,255,255), font=font2)
 
     qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
     qr.add_data(url)
@@ -26,9 +29,12 @@ def createQRCodeEx(bk, name, content, url, savePath):
     qr_code2 = qr_code.resize((128, 128))
     
     x = int(width*0.5 - qr_code2.size[0]*0.5)
-    y = int(y + fontSize * 1.1)
+    y = int(y + fontSize)
     image.paste(qr_code2, box=(x,y))
-    #draw.bitmap((x,y), qr_code)
+
+    x = width*0.5 - (len(description)*fontSize2*0.5)
+    y = y + 128 + 20
+    draw.text((x,y), description, fill=(0,190,166,255), font=font2)
     image.save(savePath, "png")
 
 def createQRCode(url, savePath):

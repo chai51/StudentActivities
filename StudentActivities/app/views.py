@@ -337,10 +337,11 @@ def createLeader(request):
         pathQRCode = os.path.join(settings.STATIC_ROOT, str(student.activity_id), str(student.gid)+".png")
         tests.createQRCodeEx(
             os.path.join(settings.STATIC_ROOT, str(student.activity_id), "leader_qrcode_bg.png"),
-            name,
+            child_name,
             "邀请你一起来报课",
             urlQRCode,
-            pathQRCode
+            pathQRCode,
+            "长按识别二维码，报名预定学位"
         )
 
         student.qr_code = tests.convertPath(pathQRCode)
@@ -539,4 +540,11 @@ def qrCode(request):
     return JsonResponse(data, safe=False)
 
 def test(request):
+    tests.createQRCodeEx(
+        os.path.join(settings.STATIC_ROOT, str(student.activity_id), "leader_qrcode_bg.png"),
+        child_name,
+        "邀请你一起来报课",
+        urlQRCode,
+        pathQRCode
+    )
     return JsonResponse({"code":"1", "info":"test"}, safe=False)
