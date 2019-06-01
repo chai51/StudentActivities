@@ -1,5 +1,8 @@
 import qrcode 
 from PIL import Image, ImageFont, ImageDraw
+import time
+import base64
+import hmac
 
 # Create your tests here.
 staticResUrl = ''
@@ -50,3 +53,9 @@ def convertPath(inPath):
     if path in inPath:
         return pathPrefix + inPath[len(path):]
     return inPath
+
+def createToken(user):
+    timestamp = str(time.time())
+    sha1 = hmac.new(user.encode("utf-8"), timestamp.encode("utf-8"), 'sha1').hexdigest()
+    token = timestamp + ':' + sha1
+    return base64.urlsafe_b64encode(token.encode("utf-8")).decode("utf-8")

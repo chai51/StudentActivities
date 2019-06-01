@@ -9,6 +9,11 @@ import hashlib
 
 
 # Create your views here.
+def tokenCheck(token):
+    if (len(token) == 0):
+        return False
+    values = list(models.User.objects.filter(token=token).values())
+    return len(values)
 
 def login(request):
     data = {"code": "2", "info":"wrong request method"}
@@ -26,14 +31,17 @@ def login(request):
             data = {"code": "3", "info":"Missing at least one parameter : user passwd"}
             return JsonResponse(data, safe=False)
         
-        values = list(models.User.objects.filter(user=user).values())
-        if len(values) == 0:
-            data = {"code": "10", "info":"Username not found"}
+        users = models.User()
+        try:
+            users = models.User.objects.get(user=user)
+        except models.Activity.DoesNotExist:
+            data = {"code": "4", "info":"no data found"}
             return JsonResponse(data, safe=False)
         
-        passwd2 = values[0].pop("passwd")
-        if (passwd2 == passwd):
-            data = {"code": "1", "info":"", "data":values}
+        if (users.passwd == passwd):
+            users.token = tests.createToken(user)
+            users.save()
+            data = {"code": "1", "info":"", "data":[{"user":users.user, "priority":users.priority, "create_time":users.create_time}], "token": users.token}
         else:
             data = {"code": "10", "info":"wrong username or password"}
     return JsonResponse(data, safe=False)
@@ -95,6 +103,8 @@ def course(request):
     return JsonResponse(data, safe=False)
 
 def createActivity(request):
+    if tokenCheck(request.META.get("HTTP_TOKEN")) == False:
+        return JsonResponse({"code": "5", "info":"token check failed"}, safe=False)
     data = {"code": "2", "info":"wrong request method"}
     if request.method == 'POST':
         postBody = {}
@@ -152,6 +162,8 @@ def createActivity(request):
     return JsonResponse(data, safe=False)
 
 def updateActivity(request):
+    if tokenCheck(request.META.get("HTTP_TOKEN")) == False:
+        return JsonResponse({"code": "5", "info":"token check failed"}, safe=False)
     data = {"code": "2", "info":"wrong request method"}
     if request.method == 'POST':
         postBody = {}
@@ -220,6 +232,8 @@ def updateActivity(request):
     return JsonResponse(data, safe=False)
 
 def updateActivity2(request):
+    if tokenCheck(request.META.get("HTTP_TOKEN")) == False:
+        return JsonResponse({"code": "5", "info":"token check failed"}, safe=False)
     data = {"code": "2", "info":"wrong request method"}
     if request.method == 'POST':
         activity_id = request.POST.get('activity_id')
@@ -394,6 +408,8 @@ def joinLeader(request):
     return JsonResponse(data, safe=False)
 
 def createCourse(request):
+    if tokenCheck(request.META.get("HTTP_TOKEN")) == False:
+        return JsonResponse({"code": "5", "info":"token check failed"}, safe=False)
     data = {"code": "2", "info":"wrong request method"}
     if request.method == 'POST':
         postBody = {}
@@ -424,6 +440,8 @@ def createCourse(request):
     return JsonResponse(data, safe=False)
 
 def updateCourse(request):
+    if tokenCheck(request.META.get("HTTP_TOKEN")) == False:
+        return JsonResponse({"code": "5", "info":"token check failed"}, safe=False)
     data = {"code": "2", "info":"wrong request method"}
     if request.method == 'POST':
         postBody = {}
@@ -454,6 +472,8 @@ def updateCourse(request):
     return JsonResponse(data, safe=False)
 
 def deleteCourse(request):
+    if tokenCheck(request.META.get("HTTP_TOKEN")) == False:
+        return JsonResponse({"code": "5", "info":"token check failed"}, safe=False)
     data = {"code": "2", "info":"wrong request method"}
     if request.method == 'POST':
         postBody = {}
@@ -480,6 +500,8 @@ def deleteCourse(request):
     return JsonResponse(data, safe=False)
 
 def deleteMember(request):
+    if tokenCheck(request.META.get("HTTP_TOKEN")) == False:
+        return JsonResponse({"code": "5", "info":"token check failed"}, safe=False)
     data = {"code": "2", "info":"wrong request method"}
     if request.method == 'POST':
         postBody = {}
@@ -504,6 +526,42 @@ def deleteMember(request):
         student.delete()
         data = {"code": "1", "info":""}
     return JsonResponse(data, safe=False)
+
+def downloadActivityData(request):
+    if tokenCheck(request.META.get("HTTP_TOKEN")) == False:
+        return JsonResponse({"code": "5", "info":"token check failed"}, safe=False)
+    data = {"code": "2", "info":"wrong request method"}
+    if request.method == 'GET':
+        activity_id = request.GET.get('activity_id')
+        if activity_id is None:
+            data = {"code": "3", "info":"Missing at least one parameter : activity_id"}
+            return JsonResponse(data, safe=False)
+
+        md5 = hashlib.md5()
+        md5.update(str(activity_id).encode("utf-8"))
+        dataDst = md5.hexdigest()
+
+        path = os.path.join(settings.STATIC_ROOT, "download")
+        if os.path.exists(path) == False:
+            os.makedirs(path)
+
+        file = os.path.join(path, "{}.xls".format(dataDst))
+        fw = open(file, 'w')
+        fw.write("test data")
+        fw.write(dataDst)
+        fw.close()
+
+        data = {"code": "1", "info":"", "data":[{"downloadUrl":tests.convertPath(file)}]}
+    return JsonResponse(data, safe=False)
+
+def loginCheck(request):
+    if tokenCheck(request.META.get("HTTP_TOKEN")) == False:
+        return JsonResponse({"code": "5", "info":"token check failed"}, safe=False)
+    return JsonResponse({"code": "1", "info":""}, safe=False)
+
+def logout(request):
+    pass
+
 
 def qrCode(request):
     data = {"code": "2", "info":"wrong request method"}

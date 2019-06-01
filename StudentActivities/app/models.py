@@ -9,6 +9,7 @@ class User(models.Model):
     passwd = models.CharField(u'管理员密码', max_length=64)
     priority = models.IntegerField(help_text=u'权限，0超级管理员，1普通管理员')
     create_time = models.DateTimeField(u'创建时间', auto_now_add=True)
+    token = models.CharField(u'登陆验证', max_length=128)
 
 class Activity(models.Model):
     id = models.AutoField(primary_key=True)
