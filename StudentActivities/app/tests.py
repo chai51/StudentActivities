@@ -48,7 +48,7 @@ def convertImgFmt(inFile, outFile):
     Image.open(inFile).save(outFile)
 
 def convertPath(inPath):
-    path = "/var/nginx/html"
+    path = "/var/www/html"
     pathPrefix = ''
     if path in inPath:
         return pathPrefix + inPath[len(path):]

@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'yf)5m_q7xri9sxs!y(9q63tb2j$_-bnfy=$x6$kmffdgz#rgrq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -56,6 +56,20 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = (
+    '*'
+)
+CORS_ALLOW_METHODS = (
+    'GET',
+    'OPTIONS',
+    'POST',
+)
+
+CORS_ALLOW_HEADERS = (
+    'Content-Type',
+    'Token',
+)
+
 ROOT_URLCONF = 'StudentActivities.urls'
 
 TEMPLATES = [
@@ -129,5 +143,5 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = '/var/nginx/html/static2'
+STATIC_ROOT = '/var/www/html/static2'
 

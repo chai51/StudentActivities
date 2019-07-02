@@ -545,10 +545,62 @@ def downloadActivityData(request):
         if os.path.exists(path) == False:
             os.makedirs(path)
 
+
+        values = list(models.Activity.objects.filter(id=activity_id).values())
+        values2 = list(models.Student.objects.filter(activity_id=activity_id).order_by("gid").values())
+        values3 = list(models.Student.objects.filter(activity_id=activity_id).order_by("gid").values("gid").annotate(cnt=models.Count("gid")))
+        
+        print ("chai :", values)
+        print ("chai2 :", values2)
+        print ("chai3 :", values3)
+
         file = os.path.join(path, "{}.xls".format(dataDst))
         fw = open(file, 'w')
-        fw.write("test data")
-        fw.write(dataDst)
+        fw.write(values[0]['title'] + '\n')
+        fw.write('活动主办方:' + values[0]['organizer'] + '\n')
+        fw.write('主办方联系方式:' + values[0]['phone'] + '\n')
+        fw.write('主办方地址:' + values[0]['address'] + '\n')
+        totalCnt = len(values2) # 总人数
+        totalCntOK = 0          # 成功参与活动人数
+        secTotal = 0            # 方案二的团队个数
+        thiTotal = 0            # 方案三的团队个数
+        secCnt = int(values[0]['price2'].split(',')[0])  # 方案二条件人数
+        thiCnt = int(values[0]['price3'].split(',')[0])  # 方案三条件人数
+        for val in values3:
+            cnt = int(val['cnt'])
+            if cnt >= thiCnt:
+                totalCntOK = totalCntOK + cnt
+                thiTotal = thiTotal + 1
+            elif cnt >= secCnt:
+                totalCntOK = totalCntOK + cnt
+                secTotal = secTotal + 1
+        fw.write('一共{}人参加此次活动，成功参加活动{}人，其中{}人团{}个，{}人团{}个\n\n'.format(totalCnt, totalCntOK, secCnt, secTotal, thiCnt, thiTotal))
+        
+        arrIndex = 0
+        for num in range(0, len(values3)):
+            cnt = int(values3[num]['cnt'])
+            if cnt >= thiCnt:
+                fw.write('{}人团\t学生姓名\t年龄\t课程\t家长姓名\t联系方式\n'.format(thiCnt))
+                while True:
+                    if values3[num]['gid'] == values2[arrIndex]['gid']:
+                        fw.write('\t{}\t{}\t{}\t{}\t{}\n'.format(values2[arrIndex]['child_name'], values2[arrIndex]['age'], values2[arrIndex]['course_id'], values2[arrIndex]['name'], values2[arrIndex]['phone']))
+                        arrIndex = arrIndex + 1
+                    else:
+                        fw.write('\n')
+                        break
+            elif cnt >= secCnt:
+                fw.write('{}人团\t学生姓名\t年龄\t课程\t家长姓名\t联系方式\n'.format(secCnt))
+                while True:
+                    if values3[num]['gid'] == values2[arrIndex]['gid']:
+                        fw.write('\t{}\t{}\t{}\t{}\t{}\n'.format(values2[arrIndex]['child_name'], values2[arrIndex]['age'], values2[arrIndex]['course_id'], values2[arrIndex]['name'], values2[arrIndex]['phone']))
+                        arrIndex = arrIndex + 1
+                    else:
+                        fw.write('\n')
+                        break
+            else:
+                arrIndex = arrIndex + cnt
+
+
         fw.close()
 
         data = {"code": "1", "info":"", "data":[{"downloadUrl":tests.convertPath(file)}]}
